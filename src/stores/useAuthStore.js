@@ -1,14 +1,17 @@
 import { defineStore } from "pinia";
 import axios from "../utils/api";
 import route from '../router/index'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 
 export const useAuthStore = defineStore({
     id: 'useAuthStore',
 
     state: () => ({
         user: {
-            userEmail: 'teste@gmail.com',
-            userPassword: '123456',
+            userEmail: '',
+            userPassword: '',
             userRememberLogin: false,
         },
         userCreate: {
@@ -27,13 +30,13 @@ export const useAuthStore = defineStore({
             try {
                 await axios.get(`/sanctum/csrf-cookie`);
             } catch (error) {
-                console.error('Error getting CSRF token: ', error);
+                toast.error(error.message)
             }
         },
         async onLogin() {
             this.getCsrfToken();
             try {
-                await axios.post(`/api/login`, {
+                await axios.post(`/login`, {
                     email: this.user.userEmail,
                     password: this.user.userPassword
                 }, this.userAccessToken).then((response) => {
@@ -46,7 +49,7 @@ export const useAuthStore = defineStore({
                     route.push({ path: '/' })
                 }).then()
             } catch (error) {
-                console.error("Error ao tentar fazer login:", error);
+                toast.error(error.response.data.message)
                 return false;
             }
         },
@@ -57,19 +60,18 @@ export const useAuthStore = defineStore({
                 window.sessionStorage.clear();
                 window.localStorage.clear();
             }
-        }
-        ,
+        },
         async onLogout() {
             this.isAuthenticated();
             delete axios.defaults.headers.common['Authorization'];
-            await axios.post(`/api/logout`, this.userAccessToken).then((response) => {
+            await axios.post(`/logout`, this.userAccessToken).then((response) => {
                 route.push({ path: '/login' });
             });
         },
         async onCreateAccount() {
             this.getCsrfToken();
             try {
-                await axios.post(`/api/register`, {
+                await axios.post(`/register`, {
                     name: this.userCreate.userName,
                     username: this.userCreate.userUsername,
                     email: this.userCreate.userEmail,
@@ -85,7 +87,7 @@ export const useAuthStore = defineStore({
                     route.push({ path: '/' })
                 }).then()
             } catch (error) {
-                console.error("Error ao tentar fazer login:", error);
+                toast.error(error.response.data.message)
                 return false;
             }
         },
