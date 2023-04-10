@@ -33,9 +33,10 @@
           />
           
           <input
-            type="text"
+            type="password"
             class="form-control py-3 px-4 block mt-4"
             placeholder="Confirmação da Senha"
+            v-model="userCreate.userPasswordConfirmation"
           />
           <div class="flex items-center text-slate-500 mt-4 text-xs sm:text-sm">
             <input

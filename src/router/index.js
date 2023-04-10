@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "../layout/Main.vue";
 import { useAuthStore } from "../stores/useAuthStore";
-import DashboardOverview1 from "../views/dashboard-overview-1/Main.vue";
+import Dashboard from "../econome/views/dashboard/Main.vue";
 import Login from "../econome/views/login/Main.vue";
 import Register from "../econome/views/register/Main.vue";
 import ErrorPage from "../views/error-page/Main.vue";
@@ -17,8 +17,8 @@ const routes = [
     children: [
       {
         path: "/",
-        name: "dashboard-overview-1",
-        component: DashboardOverview1,
+        name: "dashboard",
+        component: Dashboard,
         meta: { requiresAuth: true },
       },
       {

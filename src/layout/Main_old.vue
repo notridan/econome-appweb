@@ -176,7 +176,7 @@ import { computed, onMounted, provide, ref, watch, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { helper as $h } from "@/utils/helper";
 import { useMainMenuStore } from "@/stores/main-menu";
-import TopBar from "@/econome/components/top-bar/Main.vue";
+import TopBar from "@/components/top-bar/Main.vue";
 import DarkModeSwitcher from "@/components/dark-mode-switcher/Main.vue";
 import MainColorSwitcher from "@/components/main-color-switcher/Main.vue";
 import { linkTo as link, nestedMenu, enter, leave } from "./index";

@@ -73,9 +73,9 @@ export const useAuthStore = defineStore({
             try {
                 const response = await axios.post("/register", {
                     name: this.userCreate.userName,
-                    username: this.userCreate.userUsername,
                     email: this.userCreate.userEmail,
-                    password: this.userCreate.userPassword
+                    password: this.userCreate.userPassword,
+                    password_confirmation: this.userCreate.userPasswordConfirmation,
                 });
 
                 this.setUserData(response);
