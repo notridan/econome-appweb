@@ -13,9 +13,9 @@
         <form @submit.prevent="onLogin">
           <div
             class="box px-5 py-8 mt-10 max-w-[450px] relative before:content-[''] before:z-[-1] before:w-[95%] before:h-full before:bg-slate-200 before:border before:border-slate-200 before:-mt-5 before:absolute before:rounded-lg before:mx-auto before:inset-x-0 before:dark:bg-darkmode-600/70 before:dark:border-darkmode-500/60">
-            <input type="text" class="form-control py-3 px-4 block" placeholder="Email" aria-autocomplete="none"
+            <input type="text" class="form-control py-3 px-4 block" placeholder="Email" autocomplete="email"
               v-model="user.userEmail" />
-            <input type="password" class="form-control py-3 px-4 block mt-4" placeholder="Senha"
+            <input type="password" class="form-control py-3 px-4 block mt-4" placeholder="Senha" autocomplete="current-password"
               v-model="user.userPassword" />
             <div class="text-slate-500 flex text-xs sm:text-sm mt-4">
               <div class="flex items-center mr-auto">

@@ -3,7 +3,7 @@ import MainLayout from "../layout/Main.vue";
 import { useAuthStore } from "../stores/useAuthStore";
 import DashboardOverview1 from "../views/dashboard-overview-1/Main.vue";
 import Login from "../econome/views/login/Main.vue";
-import Register from "../views/register/Main.vue";
+import Register from "../econome/views/register/Main.vue";
 import ErrorPage from "../views/error-page/Main.vue";
 
 const isAuthenticated = () => {

@@ -1,17 +1,17 @@
 import { defineStore } from "pinia";
 import axios from "../utils/api";
-import route from '../router/index'
-import { useToast } from 'vue-toastification'
+import route from "../router/index";
+import { useToast } from "vue-toastification";
 
-const toast = useToast()
+const toast = useToast();
 
 export const useAuthStore = defineStore({
-    id: 'useAuthStore',
+    id: "useAuthStore",
 
     state: () => ({
         user: {
-            userEmail: '',
-            userPassword: '',
+            userEmail: "",
+            userPassword: "",
             userRememberLogin: false,
         },
         userCreate: {
@@ -22,7 +22,7 @@ export const useAuthStore = defineStore({
         },
         userData: null,
         userAccessToken: null,
-        userLogged: false
+        userLogged: false,
     }),
 
     actions: {
@@ -30,32 +30,27 @@ export const useAuthStore = defineStore({
             try {
                 await axios.get(`/sanctum/csrf-cookie`);
             } catch (error) {
-                toast.error(error.message)
+                toast.error(error.message);
             }
         },
         async onLogin() {
-            this.getCsrfToken();
+            await this.getCsrfToken();
+
             try {
-                await axios.post(`/login`, {
+                const response = await axios.post("/login", {
                     email: this.user.userEmail,
-                    password: this.user.userPassword
-                }, this.userAccessToken).then((response) => {
-                    this.userAccessToken = response.data.token
-                    this.userLogged = true;
-                    this.userData = response.data.user;
-                    window.localStorage.setItem('userData', JSON.stringify(this.userData));
-                    window.localStorage.setItem('token', response.data.token);
-                    window.localStorage.setItem('userLogged', this.userLogged);
-                    route.push({ path: '/' })
-                }).then()
+                    password: this.user.userPassword,
+                });
+
+                this.setUserData(response);
+                route.push({ path: "/" });
             } catch (error) {
-                toast.error(error.response.data.message)
+                toast.error(error.response.data.message);
                 return false;
             }
         },
         isAuthenticated() {
-            this.userLogged = false;
-            window.location.reload(true)
+            // window.location.reload(true);
             if (!this.userLogged) {
                 window.sessionStorage.clear();
                 window.localStorage.clear();
@@ -63,42 +58,47 @@ export const useAuthStore = defineStore({
         },
         async onLogout() {
             this.isAuthenticated();
-            delete axios.defaults.headers.common['Authorization'];
-            await axios.post(`/logout`, this.userAccessToken).then((response) => {
-                route.push({ path: '/login' });
-            });
+            delete axios.defaults.headers.common["Authorization"];
+            
+            try {
+                await axios.post("/logout");
+                route.push({ path: "/login" });
+              } catch (error) {
+                toast.error(error.response.data.message);
+              }
         },
         async onCreateAccount() {
-            this.getCsrfToken();
+            // await this.getCsrfToken();
+
             try {
-                await axios.post(`/register`, {
+                const response = await axios.post("/register", {
                     name: this.userCreate.userName,
                     username: this.userCreate.userUsername,
                     email: this.userCreate.userEmail,
                     password: this.userCreate.userPassword
-                }).then((response) => {
-                    this.userAccessToken = response.data.token
-                    this.userLogged = true;
-                    this.userData = response.data.user;
-                    window.localStorage.setItem('userData', JSON.stringify(this.userData));
-                    window.localStorage.setItem('token', response.data.token);
-                    window.localStorage.setItem('userLogged', this.userLogged);
-                    window.localStorage.setItem('token', response.data.token);
-                    route.push({ path: '/' })
-                }).then()
+                });
+
+                this.setUserData(response);
+                route.push({ path: "/" });
             } catch (error) {
-                toast.error(error.response.data.message)
+                toast.error(error.response.data.message);
                 return false;
             }
+        },
+        setUserData(response) {
+            this.userAccessToken = response.data.token;
+            this.userLogged = true;
+            this.userData = response.data.user;
+            window.localStorage.setItem("userData", JSON.stringify(this.userData));
+            window.localStorage.setItem("token", response.data.token);
+            window.localStorage.setItem("userLogged", this.userLogged);
         },
     },
 
     getters: {
         getUserData() {
-            const data = localStorage.getItem('userData');
+            const data = localStorage.getItem("userData");
             return JSON.parse(data);
-        }
-    }
-
-
+        },
+    },
 });
