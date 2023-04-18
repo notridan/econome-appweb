@@ -4,7 +4,7 @@
       class="w-full min-h-screen p-5 md:p-20 flex items-center justify-center"
     >
       <div class="w-96 intro-y">\
-        <form @submit.prevent="onCreateAccount" aria-autocomplete="none">
+        <form @submit.prevent="handleCreateAccount" aria-autocomplete="none">
         <div
           class="text-white dark:text-slate-300 text-2xl font-medium text-center mt-14"
         >
@@ -17,26 +17,26 @@
             type="text"
             class="form-control py-3 px-4 block"
             placeholder="Nome"
-            v-model="userCreate.userName"
+            v-model="userName"
           />
           <input
             type="email"
             class="form-control py-3 px-4 block mt-4"
             placeholder="E-mail"
-            v-model="userCreate.userEmail"
+            v-model="userEmail"
           />
           <input
             type="password"
             class="form-control py-3 block px-4 mt-4"
             placeholder="Senha"
-            v-model="userCreate.userPassword"
+            v-model="userPassword"
           />
           
           <input
             type="password"
             class="form-control py-3 px-4 block mt-4"
             placeholder="Confirmação da Senha"
-            v-model="userCreate.userPasswordConfirmation"
+            v-model="userPasswordConfirmation"
           />
           <div class="flex items-center text-slate-500 mt-4 text-xs sm:text-sm">
             <input
@@ -78,18 +78,26 @@
 </template>
 
 <script setup>
+
 import { ref } from "vue";
 import router from "../../../router/index";
-import { mapActions, storeToRefs } from "pinia";
 import { useAuthStore } from "../../../stores/useAuthStore";
 
-const userCreateAccount = useAuthStore();
-const { userCreate } = storeToRefs(userCreateAccount);
-const { onCreateAccount } = mapActions(useAuthStore, ["onCreateAccount"]);
+const authStore = useAuthStore();
 let agree = ref(false);
+
+const userName = ref("");
+const userEmail = ref("");
+const userPassword = ref("");
+const userPasswordConfirmation = ref("");
+
+const handleCreateAccount = async () => {
+  if (agree.value) {
+    await authStore.onCreateAccount(userName.value, userEmail.value, userPassword.value, userPasswordConfirmation.value);
+  }
+};
 
 const signIn = () => {
   router.push({ path: "/login" });
 };
-
 </script>

@@ -216,7 +216,7 @@
     </div>
     <!-- END: Notifications -->
     <!-- BEGIN: Account Menu -->
-    <Dropdown class="intro-x text-slate-200 h-10">
+    <Dropdown  ref="accountDropdown" class="intro-x text-slate-200 h-10">
       <DropdownToggle
         tag="div"
         role="button"
@@ -237,7 +237,7 @@
         </div>
       </DropdownToggle>
       <DropdownMenu class="w-56">
-        <DropdownContent>
+        <DropdownContent @click="closeDropdownMenu">
           <DropdownItem>
             <UserIcon class="w-4 h-4 mr-2" /> Profile
           </DropdownItem>
@@ -292,4 +292,9 @@ const authStore = useAuthStore();
 const logout = async () => {
   await authStore.onLogout();
 };
+
+const closeDropdownMenu = () => {
+  document.body.click();
+};
+
 </script>

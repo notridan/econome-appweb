@@ -1,14 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "../layout/Main.vue";
-import { useAuthStore } from "../stores/useAuthStore";
+import { isAuthenticated } from "../stores/useAuthStore";
 import Dashboard from "../econome/views/dashboard/Main.vue";
 import Login from "../econome/views/login/Main.vue";
 import Register from "../econome/views/register/Main.vue";
 import ErrorPage from "../views/error-page/Main.vue";
-
-const isAuthenticated = () => {
-  return localStorage.getItem('token');
-}
 
 const routes = [
   {
@@ -33,11 +29,17 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+    meta: {
+      requiresUnauth: true
+    }
   },
   {
     path: "/register",
     name: "register",
     component: Register,
+    meta: {
+      requiresUnauth: true
+    }
   },
   {
     path: "/error-page",
@@ -58,17 +60,16 @@ const router = createRouter({
   },
 });
 
-// Verificar a autenticação antes de cada rota ser acessada
-router.beforeEach(async (to, from, next) => {
-  const userAuth = useAuthStore();
-  const isAuth = isAuthenticated(); // Verifique se o usuário está autenticado
-  
-  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuth) {
-      // Se a rota requer autenticação e o usuário não está autenticado, redirecione para a página de login
-      next({ path: "/login" });
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !isAuthenticated()) {
+    // Se a rota requer autenticação e o usuário não está autenticado, redirecione para a página de login
+    next('/login');
+  } else if (to.meta.requiresUnauth && isAuthenticated()) {
+    // Se a rota requer que o usuário não esteja autenticado (como a página de login) e o usuário está autenticado, redirecione para a página inicial ou dashboard
+    next('/dashboard');
   } else {
-      // Caso contrário, continue com a navegação
-      next();
+    // Caso contrário, continue normalmente
+    next();
   }
 });
 

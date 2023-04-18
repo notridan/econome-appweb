@@ -27,7 +27,6 @@
     "dropzone": "^5.7.6",
     "highlight.js": "^10.6.0",
     "js-beautify": "^1.13.5",
-    "js-cookie": "^3.0.1",
     "litepicker": "^2.0.11",
     "lucide": "^0.17.2",
     "lucide-vue-next": "^0.17.2",

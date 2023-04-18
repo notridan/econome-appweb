@@ -7,98 +7,73 @@ const toast = useToast();
 
 export const useAuthStore = defineStore({
     id: "useAuthStore",
-
     state: () => ({
-        user: {
-            userEmail: "",
-            userPassword: "",
-            userRememberLogin: false,
-        },
-        userCreate: {
-            userName: null,
-            userUsername: null,
-            userEmail: null,
-            userPassword: null,
-        },
-        userData: null,
-        userAccessToken: null,
-        userLogged: false,
+        userAccessToken: localStorage.getItem('userAccessToken'),
     }),
 
     actions: {
-        async getCsrfToken() {
+        async onLogin(email, password) {
+            
             try {
-                await axios.get(`/sanctum/csrf-cookie`);
-            } catch (error) {
-                toast.error(error.message);
-            }
-        },
-        async onLogin() {
-            await this.getCsrfToken();
-
-            try {
-                const response = await axios.post("/login", {
-                    email: this.user.userEmail,
-                    password: this.user.userPassword,
+                const response = await axios.post("/api/v1/login", {
+                    email: email,
+                    password: password,
                 });
 
-                this.setUserData(response);
+                this.userAccessToken = response.data.token;
+                localStorage.setItem('userAccessToken', response.data.token);
+
                 route.push({ path: "/" });
             } catch (error) {
+                console.log(error);
                 toast.error(error.response.data.message);
                 return false;
-            }
-        },
-        isAuthenticated() {
-            // window.location.reload(true);
-            if (!this.userLogged) {
-                window.sessionStorage.clear();
-                window.localStorage.clear();
             }
         },
         async onLogout() {
-            this.isAuthenticated();
-            delete axios.defaults.headers.common["Authorization"];
+            if(this.userAccessToken){
+                try {
+                    await axios.post("/api/v1/logout");
+    
+                    this.userAccessToken = null;
+                    localStorage.removeItem('userAccessToken');
+    
+                    delete axios.defaults.headers.common["Authorization"];
+    
+                    route.push({ path: "/login" });
+                } catch (error) {
+                    toast.error(error.response.data.message);
+                }
+            }
             
-            try {
-                await axios.post("/logout");
-                route.push({ path: "/login" });
-              } catch (error) {
-                toast.error(error.response.data.message);
-              }
         },
-        async onCreateAccount() {
-            // await this.getCsrfToken();
-
+        async onCreateAccount(name, email, password, password_confirmation) {
             try {
-                const response = await axios.post("/register", {
-                    name: this.userCreate.userName,
-                    email: this.userCreate.userEmail,
-                    password: this.userCreate.userPassword,
-                    password_confirmation: this.userCreate.userPasswordConfirmation,
+                const response = await axios.post("/api/v1/register", {
+                    name: name,
+                    email: email,
+                    password: password,
+                    password_confirmation: password_confirmation,
                 });
 
-                this.setUserData(response);
+                this.userAccessToken = response.data.token;
+                localStorage.setItem('userAccessToken', response.data.token);
+
                 route.push({ path: "/" });
             } catch (error) {
                 toast.error(error.response.data.message);
                 return false;
             }
-        },
-        setUserData(response) {
-            this.userAccessToken = response.data.token;
-            this.userLogged = true;
-            this.userData = response.data.user;
-            window.localStorage.setItem("userData", JSON.stringify(this.userData));
-            window.localStorage.setItem("token", response.data.token);
-            window.localStorage.setItem("userLogged", this.userLogged);
         },
     },
 
     getters: {
-        getUserData() {
-            const data = localStorage.getItem("userData");
-            return JSON.parse(data);
-        },
+        isLoggedIn: (state) => !!state.userAccessToken,
     },
+    
 });
+
+export const isAuthenticated = () => {
+    const authStore = useAuthStore();
+    return authStore.isLoggedIn;
+};
