@@ -20,12 +20,14 @@
             v-model="userName"
           />
           <input
+            autocomplete="username"
             type="email"
             class="form-control py-3 px-4 block mt-4"
             placeholder="E-mail"
             v-model="userEmail"
           />
           <input
+            autocomplete="new-password"
             type="password"
             class="form-control py-3 block px-4 mt-4"
             placeholder="Senha"
@@ -33,6 +35,7 @@
           />
           
           <input
+            autocomplete="new-password"
             type="password"
             class="form-control py-3 px-4 block mt-4"
             placeholder="Confirmação da Senha"
