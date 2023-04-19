@@ -2,8 +2,15 @@ import { defineStore } from "pinia";
 import axios from "../utils/api";
 import route from "../router/index";
 import { useToast } from "vue-toastification";
+import {useLoading} from 'vue-loading-overlay';
+import { black } from "tailwindcss/colors";
 
 const toast = useToast();
+const $loading = useLoading({
+    // options
+    isFullPage: true,
+    backgroundColor: black
+});
 
 export const useAuthStore = defineStore({
     id: "useAuthStore",
@@ -13,7 +20,7 @@ export const useAuthStore = defineStore({
 
     actions: {
         async onLogin(email, password) {
-            
+            let loader = $loading.show();
             try {
                 const response = await axios.post("/api/v1/login", {
                     email: email,
@@ -28,10 +35,13 @@ export const useAuthStore = defineStore({
                 console.log(error);
                 toast.error(error.response.data.message);
                 return false;
+            } finally {
+                loader.hide();
             }
         },
         async onLogout() {
             if(this.userAccessToken){
+                let loader = $loading.show();
                 try {
                     await axios.post("/api/v1/logout");
     
@@ -43,11 +53,14 @@ export const useAuthStore = defineStore({
                     route.push({ path: "/login" });
                 } catch (error) {
                     toast.error(error.response.data.message);
+                } finally {
+                    loader.hide();
                 }
             }
             
         },
         async onCreateAccount(name, email, password, password_confirmation) {
+            let loader = $loading.show();
             try {
                 const response = await axios.post("/api/v1/register", {
                     name: name,
@@ -63,6 +76,8 @@ export const useAuthStore = defineStore({
             } catch (error) {
                 toast.error(error.response.data.message);
                 return false;
+            } finally {
+                loader.hide();
             }
         },
     },
