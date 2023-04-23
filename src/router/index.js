@@ -3,6 +3,7 @@ import MainLayout from "../layout/Main.vue";
 import { isAuthenticated } from "../stores/useAuthStore";
 import Dashboard from "../econome/views/dashboard/Main.vue";
 import Login from "../econome/views/login/Main.vue";
+import ForgotPassword from "../econome/views/forgot-password/Main.vue";
 import Register from "../econome/views/register/Main.vue";
 import ErrorPage from "../views/error-page/Main.vue";
 
@@ -29,6 +30,14 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+    meta: {
+      requiresUnauth: true
+    }
+  },
+  {
+    path: "/forgot-password",
+    name: "forgot-password",
+    component: ForgotPassword,
     meta: {
       requiresUnauth: true
     }

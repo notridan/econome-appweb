@@ -39,6 +39,22 @@ export const useAuthStore = defineStore({
                 loader.hide();
             }
         },
+        async onResetPassword(email) {
+            let loader = $loading.show();
+            try {
+                const response = await axios.post("/api/v1/forgot-password", {
+                    email: email,
+                });
+
+                route.push({ path: "/login" });
+                toast.success(response.data.message)
+            } catch (error) {
+                toast.error(error.response.data.message);
+                return false;
+            } finally {
+                loader.hide();
+            }
+        },
         async onLogout() {
             if(this.userAccessToken){
                 let loader = $loading.show();
