@@ -39,7 +39,7 @@ export const useAuthStore = defineStore({
                 loader.hide();
             }
         },
-        async onResetPassword(email) {
+        async onForgotPassword(email) {
             let loader = $loading.show();
             try {
                 const response = await axios.post("/api/v1/forgot-password", {
@@ -53,6 +53,26 @@ export const useAuthStore = defineStore({
                 return false;
             } finally {
                 loader.hide();
+            }
+        },
+        async onResetPassword(email, password, password_confirmation, token){
+            // let loader = $loading.show();
+            try {
+                const response = await axios.post("/api/v1/reset-password", {
+                    email: email,
+                    password: password,
+                    password_confirmation: password_confirmation,
+                    token: token
+                });
+
+                route.push({ path: "/login" });
+                toast.success(response.data.message)
+            } catch (error) {
+                console.log(error)
+                toast.error(error.response.data.message);
+                return false;
+            } finally {
+                // loader.hide();
             }
         },
         async onLogout() {
