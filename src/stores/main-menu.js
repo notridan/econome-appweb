@@ -3,18 +3,16 @@ import { defineStore } from "pinia";
 export const useMainMenuStore = defineStore("mainMenu", {
   state: () => ({
     menu: [
-      "START MENU",
+      "MENU PRINCIPAL",
       {
         icon: "HomeIcon",
         pageName: "dashboard",
-        title: "Dashboard",
-        subMenu: [
-          {
-            icon: "",
-            pageName: "dashboard-overview-1",
-            title: "Overview 1",
-          }
-        ],
+        title: "Resumo Geral",
+      },
+      {
+        icon: "SettingsIcon",
+        pageName: "settings",
+        title: "Configurações"
       },
     ],
   }),

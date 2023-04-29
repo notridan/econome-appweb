@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "../layout/Main.vue";
 import { isAuthenticated } from "../stores/useAuthStore";
 import Dashboard from "../econome/views/dashboard/Main.vue";
+import Settings from "../econome/views/settings/Main.vue";
 import Login from "../econome/views/login/Main.vue";
 import ForgotPassword from "../econome/views/forgot-password/Main.vue";
 import ResetPassword from "../econome/views/reset-password/Main.vue";
@@ -21,9 +22,12 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
-        path: "notification",
-        name: "notification",
-        component: Notification,
+        path: "/settings",
+        name: "settings",
+        component: Settings,
+        meta: {
+          requiresAuth: true
+        }
       },
       
     ],

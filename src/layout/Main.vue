@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
-    <DarkModeSwitcher />
-    <MainColorSwitcher />
+    <!-- <DarkModeSwitcher /> -->
+    <!-- <MainColorSwitcher /> -->
     <!-- BEGIN: Side Menu -->
     <nav
       class="side-nav"
