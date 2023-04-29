@@ -6,6 +6,7 @@ import Login from "../econome/views/login/Main.vue";
 import ForgotPassword from "../econome/views/forgot-password/Main.vue";
 import Register from "../econome/views/register/Main.vue";
 import ErrorPage from "../views/error-page/Main.vue";
+import { useToast } from 'vue-toastification';
 
 const routes = [
   {
@@ -70,6 +71,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+
+  verifyEmail(to.query);
+
   if (to.meta.requiresAuth && !isAuthenticated()) {
     // Se a rota requer autenticação e o usuário não está autenticado, redirecione para a página de login
     next('/login');
@@ -81,5 +85,28 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+async function verifyEmail(query){
+  const toast = useToast();
+  const response = query['email-verify'];
+  if (response) {
+    
+    switch (response) {
+      case 'invalid':
+        toast.error('Link de verificação de email inválido.');
+        break;
+      case 'already_verified':
+        toast.warning('O email já foi verificado.');
+        break;
+      case 'success':
+        toast.success('Email verificado com sucesso.');
+        break;
+    
+      default:
+        break;
+    }
+
+  }
+}
 
 export default router;
