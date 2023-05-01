@@ -35,14 +35,14 @@
       >
         <div class="w-10 h-10 image-fit">
           <img
-            alt="Rocketman - HTML Admin Template"
+            alt="EconoMe"
             class="rounded-full border-2 border-white border-opacity-10 shadow-lg"
-            :src="$f()[9].photos[0]"
+            src="src/assets/images/profile-picture.jpeg"
           />
         </div>
         <div class="hidden md:block ml-3">
           <div class="max-w-[7rem] truncate font-medium">
-            {{ $f()[0]["users"][0]["name"] }}
+            {{ authStore.userProfile?.name }}
           </div>
           <div class="text-xs text-slate-400">{{ $f()[0]["jobs"][0] }}</div>
         </div>

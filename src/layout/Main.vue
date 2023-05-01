@@ -177,12 +177,14 @@ import { useRoute, useRouter } from "vue-router";
 import { helper as $h } from "@/utils/helper";
 import { useMainMenuStore } from "@/stores/main-menu";
 import TopBar from "@/econome/components/top-bar/Main.vue";
-import DarkModeSwitcher from "@/components/dark-mode-switcher/Main.vue";
-import MainColorSwitcher from "@/components/main-color-switcher/Main.vue";
+// import DarkModeSwitcher from "@/components/dark-mode-switcher/Main.vue";
+// import MainColorSwitcher from "@/components/main-color-switcher/Main.vue";
 import { linkTo as link, nestedMenu, enter, leave } from "./index";
 import dom from "@left4code/tw-starter/dist/js/dom";
 import SimpleBar from "simplebar";
+import { useAuthStore } from "../stores/useAuthStore";
 
+const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const formattedMenu = ref([]);
@@ -255,7 +257,8 @@ watch(
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
+  await authStore.onGetUserInfo();
   dom("body").removeClass("error-page").removeClass("login").addClass("main");
   new SimpleBar(dom(".side-nav .scrollable")[0]);
   formattedMenu.value = $h.toRaw(mainMenu.value);

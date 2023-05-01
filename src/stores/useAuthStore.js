@@ -16,6 +16,7 @@ export const useAuthStore = defineStore({
     id: "useAuthStore",
     state: () => ({
         userAccessToken: localStorage.getItem('userAccessToken'),
+        userProfile: null,
     }),
 
     actions: {
@@ -116,8 +117,22 @@ export const useAuthStore = defineStore({
                 loader.hide();
             }
         },
-    },
+        async onGetUserInfo(){
+            try {
+                const response = await axios.get("/api/v1/user-profile");
+                this.userProfile = response.data.data;
 
+            } catch (error) {
+                this.userAccessToken = null;
+                localStorage.removeItem('userAccessToken');
+    
+                delete axios.defaults.headers.common["Authorization"];
+    
+                route.push({ path: "/login" });
+                toast.error(error.response.data.message);
+            }
+        },
+    },
     getters: {
         isLoggedIn: (state) => !!state.userAccessToken,
     },
