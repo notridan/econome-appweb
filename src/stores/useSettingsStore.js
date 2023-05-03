@@ -33,11 +33,16 @@ export const useSettingsStore = defineStore({
       }
     },
 
-    async updateSettings(payload) {
+    async updateSettings(formData) {
       try {
         this.loading = true;
-        await api.put('/api/v1/settings', payload);
-        this.settings = payload;
+        await api.put('/api/v1/settings', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        const updatedSettings = Object.fromEntries(formData.entries());
+        this.settings = updatedSettings;
       } catch (error) {
         this.error = error;
       } finally {

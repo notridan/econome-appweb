@@ -3,7 +3,7 @@
     <div class="w-full min-h-screen p-5 md:p-20 flex items-center justify-center">
       <div class="w-96 intro-y">
         <div class="text-white dark:text-slate-300 text-5xl font-bold font-sans text-center mt-10">
-          EconoMe
+          {{ $settings.app_name }}
         </div>
         <div class="text-white dark:text-slate-300 font-medium text-center">
           Simplifique, Organize, Realize!

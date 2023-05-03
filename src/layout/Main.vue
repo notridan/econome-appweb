@@ -22,7 +22,7 @@
             <span
               class="side-nav__header__text text-white pt-0.5 text-lg ml-2.5"
             >
-              Waveform
+              {{ $settings.app_name}}
             </span>
           </a>
           <a

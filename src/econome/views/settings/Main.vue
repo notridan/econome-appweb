@@ -12,14 +12,9 @@
             <label for="logo-input" class="form-label">Logo</label>
             <Dropzone
               ref-key="dropzoneValidationRef"
-              :options="{
-                url: 'https://httpbin.org/post',
-                thumbnailWidth: 150,
-                maxFilesize: 0.5,
-                acceptedFiles: 'image/png',
-                headers: { 'My-Awesome-Header': 'header value' },
-              }"
+              :options="dropzoneOptions"
               class="dropzone"
+              @vdropzone-success="onDropzoneSuccess"
             >
               <div class="text-lg font-medium">
                 Arraste sua logo aqui!
@@ -58,19 +53,37 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useSettingsStore } from '@/stores/settingsStore';
+import { useSettingsStore } from '@/stores/useSettingsStore';
 // import Dropzone from 'dropzone';
 
 const settingsStore = useSettingsStore();
 const editedSettings = ref({});
+const dropzoneOptions = {
+  url: 'https://httpbin.org/post',
+  thumbnailWidth: 150,
+  maxFilesize: 0.5,
+  acceptedFiles: 'image/png',
+  headers: { 'My-Awesome-Header': 'header value' },
+};
+const appLogoFile = ref(null);
 
 onMounted(async () => {
   await settingsStore.fetchSettings();
   editedSettings.value = { ...settingsStore.currentSettings };
 });
 
+const onDropzoneSuccess = (file, response) => {
+  appLogoFile.value = file;
+};
+
 const onSubmit = async () => {
-  await settingsStore.updateSettings(editedSettings.value);
+  const formData = new FormData();
+  formData.append('app_name', editedSettings.value.app_name);
+  formData.append('app_description', editedSettings.value.app_description);
+  if (appLogoFile.value) {
+    formData.append('app_logo', appLogoFile.value);
+  }
+  await settingsStore.updateSettings(formData);
 };
 </script>
 
