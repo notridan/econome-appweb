@@ -36,7 +36,7 @@ export const useSettingsStore = defineStore({
     async updateSettings(formData) {
       try {
         this.loading = true;
-        await api.put('/api/v1/settings', formData, {
+        await api.post('/api/v1/settings', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

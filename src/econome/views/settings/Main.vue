@@ -58,12 +58,15 @@ import { useSettingsStore } from '@/stores/useSettingsStore';
 
 const settingsStore = useSettingsStore();
 const editedSettings = ref({});
+
+const token = localStorage.getItem("token");
+
 const dropzoneOptions = {
-  url: 'https://httpbin.org/post',
+  url: `${import.meta.env.VITE_API_BASE_URL}`+ '/api/v1/settings/logo-update',
   thumbnailWidth: 150,
   maxFilesize: 0.5,
   acceptedFiles: 'image/png',
-  headers: { 'My-Awesome-Header': 'header value' },
+  headers: { 'Authorization': 'Bearer '+token },
 };
 const appLogoFile = ref(null);
 
@@ -80,9 +83,9 @@ const onSubmit = async () => {
   const formData = new FormData();
   formData.append('app_name', editedSettings.value.app_name);
   formData.append('app_description', editedSettings.value.app_description);
-  if (appLogoFile.value) {
-    formData.append('app_logo', appLogoFile.value);
-  }
+  // if (appLogoFile.value) {
+  //   formData.append('app_logo', appLogoFile.value);
+  // }
   await settingsStore.updateSettings(formData);
 };
 </script>

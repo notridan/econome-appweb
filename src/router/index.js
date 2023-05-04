@@ -92,7 +92,7 @@ router.beforeEach((to, from, next) => {
     next('/login');
   } else if (to.meta.requiresUnauth && isAuthenticated()) {
     // Se a rota requer que o usuário não esteja autenticado (como a página de login) e o usuário está autenticado, redirecione para a página inicial ou dashboard
-    next('/dashboard');
+    next('/');
   } else {
     // Caso contrário, continue normalmente
     next();
