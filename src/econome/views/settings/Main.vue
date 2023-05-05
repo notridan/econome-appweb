@@ -1,4 +1,5 @@
 <!-- src/econome/views/settings/Main.vue -->
+
 <template>
   <div class="intro-y flex items-center mt-8">
     <h2 class="text-lg font-medium mr-auto">Configurações Gerais</h2>
@@ -8,22 +9,6 @@
     <div class="intro-y col-span-12 lg:col-span-6">
       <div class="intro-y box">
         <div class="p-5">
-          <div class="mb-3">
-            <label for="logo-input" class="form-label">Logo</label>
-            <Dropzone
-              ref-key="dropzoneValidationRef"
-              :options="dropzoneOptions"
-              class="dropzone"
-              @vdropzone-success="onDropzoneSuccess"
-            >
-              <div class="text-lg font-medium">
-                Arraste sua logo aqui!
-              </div>
-              <div class="text-gray-600">
-                Arraste ou clique aqui para selecionar sua nova logo
-              </div>
-            </Dropzone>
-          </div>
           <div class="mt-3">
             <label for="name-input" class="form-label">Name</label>
             <input
@@ -48,25 +33,51 @@
         </div>
       </div>
     </div>
+    <div class="intro-y col-span-12 lg:col-span-6">
+      <div class="intro-y box">
+        <div class="p-5">
+          <div class="mb-3">
+            <label for="logo-input" class="form-label">Logo</label>
+            <Dropzone
+              ref-key="dropzoneValidationRef"
+              :options="dropzoneOptions"
+              class="dropzone"
+              @vdropzone-success="onDropzoneSuccess"
+            >
+              <div class="text-lg font-medium">
+                Arraste sua logo aqui!
+              </div>
+              <div class="text-gray-600">
+                Arraste ou clique aqui para selecionar sua nova logo
+              </div>
+            </Dropzone>
+          </div>
+          
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useSettingsStore } from '@/stores/useSettingsStore';
+import { useAuthStore } from "@/stores/useAuthStore";
 // import Dropzone from 'dropzone';
 
 const settingsStore = useSettingsStore();
 const editedSettings = ref({});
 
-const token = localStorage.getItem("token");
+const authStore = useAuthStore();
 
 const dropzoneOptions = {
   url: `${import.meta.env.VITE_API_BASE_URL}`+ '/api/v1/settings/logo-update',
   thumbnailWidth: 150,
   maxFilesize: 0.5,
   acceptedFiles: 'image/png',
-  headers: { 'Authorization': 'Bearer '+token },
+  headers: { 'Authorization': 'Bearer '+authStore.userAccessToken },
+  uploadMultiple: false,
+  paramName: "app_logo",
 };
 const appLogoFile = ref(null);
 
