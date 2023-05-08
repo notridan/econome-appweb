@@ -2,7 +2,7 @@
   <h2 class="intro-y text-lg font-medium mt-10">{{ title }}</h2>
   <div class="grid grid-cols-12 gap-6 mt-5">
     <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-      <button class="btn btn-primary shadow-md mr-2">{{ addButtonText }}</button>
+      <button @click="showNewModal" class="btn btn-primary shadow-md mr-2">{{ addButtonText }}</button>
 
       <div class="hidden md:block mx-auto text-slate-500">
         {{ paginationInfo }}
@@ -18,7 +18,6 @@
         </div>
       </div> -->
     </div>
-    <!-- BEGIN: Data List -->
     <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
       <table class="table table-report -mt-2">
         <thead>
@@ -47,102 +46,25 @@
             </td>
           </tr>
         </tbody>
-        <DeleteConfirmation :show="deleteConfirmationModal" @closed="deleteConfirmationModal = false" @delete="handleDelete"></DeleteConfirmation>
+        <DeleteConfirmation :show="deleteConfirmationModal" @closed="deleteConfirmationModal = false"
+          @delete="handleDelete"></DeleteConfirmation>
       </table>
     </div>
-    <!-- END: Data List -->
-    <!-- BEGIN: Pagination -->
-    <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
-      <!-- <TailwindPagination
-          :limit="1"
-          :keepLength="false"
-          :item-classes="['border-none', 'flex']"
-          :data="roleStore.roles"
-          @pagination-change-page="roleStore.fetchRoles"
-        /> -->
 
-      <PaginationComponent :limit="3" :keepLength="false" :data="roleStore.roles"
+    <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
+
+      <PaginationComponent class="w-full sm:w-auto sm:mr-auto" :limit="3" :keepLength="false" :data="roleStore.roles"
         @pagination-change-page="roleStore.fetchRoles" />
-    </div>
-    <!-- <div
-      class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center"
-    >
-      <nav class="w-full sm:w-auto sm:mr-auto">
-        <ul class="pagination">
-          <li class="page-item">
-            <a class="page-link" href="#">
-              <ChevronsLeftIcon class="w-4 h-4" />
-            </a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">
-              <ChevronLeftIcon class="w-4 h-4" />
-            </a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">...</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">1</a>
-          </li>
-          <li class="page-item active">
-            <a class="page-link" href="#">2</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">3</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">...</a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">
-              <ChevronRightIcon class="w-4 h-4" />
-            </a>
-          </li>
-          <li class="page-item">
-            <a class="page-link" href="#">
-              <ChevronsRightIcon class="w-4 h-4" />
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <select class="w-20 form-select box mt-3 sm:mt-0">
+      <!-- <select class="w-20 form-select box mt-3 sm:mt-0">
         <option>10</option>
         <option>25</option>
         <option>35</option>
         <option>50</option>
-      </select>
-    </div> -->
-    <!-- END: Pagination -->
-  </div>
-  <!-- BEGIN: Delete Confirmation Modal -->
-  <!-- <Modal
-    :show="deleteConfirmationModal"
-    @hidden="deleteConfirmationModal = false"
-  >
-    <ModalBody class="p-0">
-      <div class="p-5 text-center">
-        <XCircleIcon class="w-16 h-16 text-danger mx-auto mt-3" />
-        <div class="text-3xl mt-5">Are you sure?</div>
-        <div class="text-slate-500 mt-2">
-          Do you really want to delete these records? <br />This process cannot
-          be undone.
-        </div>
-      </div>
-      <div class="px-5 pb-8 text-center">
-        <button
-          type="button"
-          @click="deleteConfirmationModal = false"
-          class="btn btn-outline-secondary w-24 mr-1"
-        >
-          Cancel
-        </button>
-        <button type="button" class="btn btn-danger w-24">Delete</button>
-      </div>
-    </ModalBody>
-  </Modal> -->
+      </select> -->
+    </div>
 
-  <!-- END: Delete Confirmation Modal -->
+    <New :show="newModal" @closed="newModal = false"></New>
+  </div>
 </template>
 
 <script setup>
@@ -150,19 +72,25 @@ import { onMounted, ref, reactive, computed } from "vue";
 import { useRoleStore } from '@/stores/useRoleStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
 import DeleteConfirmation from "./DeleteConfirmation.vue";
+import New from "./New.vue";
 
 const roleStore = useRoleStore();
 
 const deleteConfirmationModal = ref(false);
+const newModal = ref(false);
 const idToDelete = ref();
 
-function callDeleteModal(id){
+function callDeleteModal(id) {
   deleteConfirmationModal.value = true;
   idToDelete.value = id;
 }
 
-function handleDelete(){
+function handleDelete() {
   roleStore.deleteRole(idToDelete.value);
+}
+
+function showNewModal(){
+  newModal.value = true;
 }
 
 const title = ref('Casatro de Papéis');
