@@ -2,12 +2,15 @@
   <div class="container">
     <div class="w-full min-h-screen p-5 md:p-20 flex items-center justify-center">
       <div class="w-96 intro-y">
-        <div class="text-white dark:text-slate-300 text-5xl font-bold font-sans text-center mt-10">
+        <div class="">
+          <img class="w-2/5 mx-auto" :src="$settings.app_logo" :alt="$settings.app_name">
+        </div>
+        <!-- <div class="text-white dark:text-slate-300 text-5xl font-bold font-sans text-center">
           {{ $settings.app_name }}
-        </div>
-        <div class="text-white dark:text-slate-300 font-medium text-center">
+        </div> -->
+        <!-- <div class="text-white dark:text-slate-300 font-medium text-center">
           Simplifique, Organize, Realize!
-        </div>
+        </div> -->
         <form @submit.prevent="loginUser">
           <div
             class="box px-5 py-8 mt-10 max-w-[450px] relative before:content-[''] before:z-[-1] before:w-[95%] before:h-full before:bg-slate-200 before:border before:border-slate-200 before:-mt-5 before:absolute before:rounded-lg before:mx-auto before:inset-x-0 before:dark:bg-darkmode-600/70 before:dark:border-darkmode-500/60">

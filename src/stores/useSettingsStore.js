@@ -1,5 +1,14 @@
 import { defineStore } from 'pinia';
 import api from '@/utils/api';
+import { useToast } from "vue-toastification";
+import {useLoading} from 'vue-loading-overlay';
+
+const toast = useToast();
+const $loading = useLoading({
+  // options
+  isFullPage: true,
+  backgroundColor: "#000000"
+});
 
 export const useSettingsStore = defineStore({
   id: 'settings',

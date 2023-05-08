@@ -1237,6 +1237,13 @@ js-beautify@^1.13.5:
     glob "^8.0.3"
     nopt "^6.0.0"
 
+laravel-vue-pagination@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/laravel-vue-pagination/-/laravel-vue-pagination-4.1.0.tgz#c7097b047ec14c9c0e49395bd0643f7892087685"
+  integrity sha512-t5+AMnEe7Q6CzZrAwLBULeoLjg07cChyDCZneytzrLmiGASkj7c0cX65dnXbp8o52bXmkTsJQV6f8z2mh7FRLw==
+  dependencies:
+    vue "^3.2.47"
+
 lilconfig@^2.0.5, lilconfig@^2.0.6:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/lilconfig/-/lilconfig-2.1.0.tgz#78e23ac89ebb7e1bfbf25b18043de756548e7f52"
@@ -1786,7 +1793,7 @@ vue-toastification@^2.0.0-rc.5:
   resolved "https://registry.yarnpkg.com/vue-toastification/-/vue-toastification-2.0.0-rc.5.tgz#92798604d806ae473cfb76ed776fae294280f8f8"
   integrity sha512-q73e5jy6gucEO/U+P48hqX+/qyXDozAGmaGgLFm5tXX4wJBcVsnGp4e/iJqlm9xzHETYOilUuwOUje2Qg1JdwA==
 
-vue@^3.2.25:
+vue@^3.2.25, vue@^3.2.47:
   version "3.2.47"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.47.tgz#3eb736cbc606fc87038dbba6a154707c8a34cff0"
   integrity sha512-60188y/9Dc9WVrAZeUVSDxRQOZ+z+y5nO2ts9jWXSTkMvayiWxCWOWtBQoYjLeccfXkiiPZWAHcV+WTPhkqJHQ==

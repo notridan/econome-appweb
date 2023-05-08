@@ -14,6 +14,18 @@ export const useMainMenuStore = defineStore("mainMenu", {
         pageName: "settings",
         title: "Configurações"
       },
+      {
+        icon: "KeyIcon",
+        pageName: "accessPermissions",
+        title: "Identidade e Acesso",
+        subMenu: [
+          {
+            icon: "",
+            pageName: "identity-access-roles",
+            title: "Papéis"
+          }
+        ]
+      },
     ],
   }),
 });

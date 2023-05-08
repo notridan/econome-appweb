@@ -25,7 +25,7 @@ const toastOptions = {
 };
 
 export default (app) => {
-  // app.use(faker);
+  app.use(faker);
   app.use(helper);
   app.use(lodash);
   app.use(colors);

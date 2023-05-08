@@ -3,13 +3,12 @@ import axios from "../utils/api";
 import route from "../router/index";
 import { useToast } from "vue-toastification";
 import {useLoading} from 'vue-loading-overlay';
-import { black } from "tailwindcss/colors";
 
 const toast = useToast();
 const $loading = useLoading({
     // options
     isFullPage: true,
-    backgroundColor: black
+    backgroundColor: "#000000"
 });
 
 export const useAuthStore = defineStore({

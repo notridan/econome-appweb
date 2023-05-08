@@ -37,7 +37,7 @@
           <img
             alt="EconoMe"
             class="rounded-full border-2 border-white border-opacity-10 shadow-lg"
-            src="src/assets/images/profile-picture.jpeg"
+            src="@/assets/images/profile-picture.jpeg"
           />
         </div>
         <div class="hidden md:block ml-3">
