@@ -46,8 +46,8 @@
             </td>
           </tr>
         </tbody>
-        <DeleteConfirmation :show="deleteConfirmationModal" @closed="deleteConfirmationModal = false"
-          @delete="handleDelete"></DeleteConfirmation>
+        <Delete :show="deleteConfirmationModal" @closed="deleteConfirmationModal = false"
+          @delete="handleDelete"></Delete>
       </table>
     </div>
 
@@ -64,7 +64,7 @@
     </div>
 
     <New :show="newModal" @closed="newModal = false" @save="handleSaveRole"></New>
-    <Edit :show="editModal" :role="roleToEdit" @closed="editModal = false" @update="handleUpdateRole"></Edit>
+    <Edit v-if="roleToEdit" :show="editModal" :role="roleToEdit" @closed="editModal = false" @update="handleUpdateRole"></Edit>
   </div>
 </template>
 
@@ -72,11 +72,38 @@
 import { onMounted, ref, reactive, computed } from "vue";
 import { useRoleStore } from '@/stores/useRoleStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
-import DeleteConfirmation from "./DeleteConfirmation.vue";
-import New from "./New.vue";
+import Delete from "./Delete.vue";
+import New from "./Create.vue";
 import Edit from "./Edit.vue";
 
+// DELETE
 const roleStore = useRoleStore();
+const idToDelete = ref();
+const deleteConfirmationModal = ref(false);
+
+function callDeleteModal(id) {
+  deleteConfirmationModal.value = true;
+  idToDelete.value = id;
+}
+
+function handleDelete() {
+  roleStore.deleteRole(idToDelete.value);
+  roleStore.fetchRoles();
+}
+
+// CREATE
+
+const newModal = ref(false);
+
+function showNewModal(){
+  newModal.value = true;
+}
+
+function handleSaveRole(newRole){
+  roleStore.createRole({ name: newRole.name });
+}
+
+// UPDATE
 
 const editModal = ref(false);
 const roleToEdit = ref(null);
@@ -88,31 +115,9 @@ function showEditModal(role) {
 
 function handleUpdateRole(updatedRole) {
   roleStore.updateRole(updatedRole.id, { name: updatedRole.name });
-  roleStore.fetchRoles();
 }
 
-const deleteConfirmationModal = ref(false);
-const newModal = ref(false);
-const idToDelete = ref();
-
-function callDeleteModal(id) {
-  deleteConfirmationModal.value = true;
-  idToDelete.value = id;
-}
-
-function handleDelete() {
-  roleStore.deleteRole(idToDelete.value);
-}
-
-function showNewModal(){
-  newModal.value = true;
-  
-}
-
-function handleSaveRole(newRole){
-  roleStore.createRole({ name: newRole.name });
-  roleStore.fetchRoles();
-}
+// MODULE INFO
 
 const title = ref('Casatro de Papéis');
 const addButtonText = ref('Adicionar Novo Papel');
@@ -122,10 +127,13 @@ const columnsTitles = reactive([
   { "title": "NOME", "style": "" },
 ]);
 
+// INITIAL DATA 
+
 onMounted(async () => {
   await roleStore.fetchRoles();
-  // editedRoles.value = { ...roleStore.currentRoles};
 });
+
+// PAGINATION
 
 const paginationInfo = computed(() => {
   if (roleStore.roles.data && roleStore.roles.data.length > 0) {

@@ -10,78 +10,78 @@ const $loading = useLoading({
   backgroundColor: "#000000"
 });
 
-export const useRoleStore = defineStore({
-  id: 'role',
+export const usePermissionStore = defineStore({
+  id: 'permission',
 
   state: () => ({
-    roles: [],
-    role: null,
+    permissions: [],
+    permission: null,
   }),
 
   actions: {
-    async fetchRoles(page = 1) {
+    async fetchPermissions(page = 1) {
       let loader = $loading.show();
       try {
-        const response = await api.get(`/api/v1/roles?page=${page}`);
-        this.roles = response.data;
+        const response = await api.get(`/api/v1/permissions?page=${page}`);
+        this.permissions = response.data;
       } catch (error) {
-        console.error('Error fetching roles:', error);
+        console.error('Error fetching permissions:', error);
         toast.error(error.response.data.message);
       } finally {
         loader.hide();
       }
     },
 
-    async fetchRole(id) {
+    async fetchPermission(id) {
       let loader = $loading.show();
       try {
-        const response = await api.get(`/api/v1/roles/${id}`);
-        this.role = response.data;
+        const response = await api.get(`/api/v1/permissions/${id}`);
+        this.permission = response.data;
       } catch (error) {
-        console.error('Error fetching role:', error);
+        console.error('Error fetching permission:', error);
         toast.error(error.response.data.message);
       } finally {
         loader.hide();
       }
     },
 
-    async createRole(roleData) {
+    async createPermission(permissionData) {
       let loader = $loading.show();
       try {
-        const response = await api.post('/api/v1/roles', roleData);
+        const response = await api.post('/api/v1/permissions', permissionData);
         toast.success(response.data.message)
-        await this.fetchRoles();
+        await this.fetchPermissions();
       } catch (error) {
-        console.error('Error creating role:', error);
+        console.error('Error creating permission:', error);
         toast.error(error.response.data.message);
       } finally {
         loader.hide();
       }
     },
 
-    async updateRole(id, roleData) {
+    async updatePermission(id, permissionData) {
       let loader = $loading.show();
       try {
-        const response = await api.put(`/api/v1/roles/${id}`, roleData);
+        const response = await api.put(`/api/v1/permissions/${id}`, permissionData);
         toast.success(response.data.message);
-        await this.fetchRoles();
+        await this.fetchPermissions();
       } catch (error) {
-        console.error('Error updating role:', error);
+        console.error('Error updating permission:', error);
         toast.error(error.response.data.message);
       } finally {
         loader.hide();
       }
     },
 
-    async deleteRole(id) {
+    async deletePermission(id) {
       let loader = $loading.show();
       try {
-        const response = await api.delete(`/api/v1/roles/${id}`);
+        const response = await api.delete(`/api/v1/permissions/${id}`);
 
         toast.success(response.data.message)
         
       } catch (error) {
-        console.error('Error deleting role:', error);
+        console.error('Error deleting permission:', error);
         toast.error(error.response.data.message);
       } finally {
         loader.hide();

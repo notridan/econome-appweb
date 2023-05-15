@@ -56,7 +56,7 @@ export const useAuthStore = defineStore({
             }
         },
         async onResetPassword(email, password, password_confirmation, token){
-            // let loader = $loading.show();
+            let loader = $loading.show();
             try {
                 const response = await axios.post("/api/v1/reset-password", {
                     email: email,
@@ -72,7 +72,7 @@ export const useAuthStore = defineStore({
                 toast.error(error.response.data.message);
                 return false;
             } finally {
-                // loader.hide();
+                loader.hide();
             }
         },
         async onLogout() {

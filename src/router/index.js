@@ -3,7 +3,8 @@ import MainLayout from "../layout/Main.vue";
 import { isAuthenticated } from "../stores/useAuthStore";
 import Dashboard from "../econome/views/dashboard/Main.vue";
 import Settings from "../econome/views/settings/Main.vue";
-import IdentityAccess from "../econome/views/identity-access/Main.vue";
+import Roles from "../econome/views/identity-access/roles/Main.vue";
+import Permissions from "../econome/views/identity-access/permissions/Main.vue";
 import Login from "../econome/views/login/Main.vue";
 import ForgotPassword from "../econome/views/forgot-password/Main.vue";
 import ResetPassword from "../econome/views/reset-password/Main.vue";
@@ -33,7 +34,15 @@ const routes = [
       {
         path: "/identity-access/roles",
         name: "identity-access-roles",
-        component: IdentityAccess,
+        component: Roles,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: "/identity-access/permissions",
+        name: "identity-access-permissions",
+        component: Permissions,
         meta: {
           requiresAuth: true
         }

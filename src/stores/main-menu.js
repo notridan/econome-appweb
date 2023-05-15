@@ -23,6 +23,11 @@ export const useMainMenuStore = defineStore("mainMenu", {
             icon: "",
             pageName: "identity-access-roles",
             title: "Papéis"
+          },
+          {
+            icon: "",
+            pageName: "identity-access-permissions",
+            title: "Permissões"
           }
         ]
       },

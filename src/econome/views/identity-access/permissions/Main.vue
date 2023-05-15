@@ -1,0 +1,147 @@
+<template>
+  <h2 class="intro-y text-lg font-medium mt-10">{{ title }}</h2>
+  <div class="grid grid-cols-12 gap-6 mt-5">
+    <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
+      <button @click="showNewModal" class="btn btn-primary shadow-md mr-2">{{ addButtonText }}</button>
+
+      <div class="hidden md:block mx-auto text-slate-500">
+        {{ paginationInfo }}
+      </div>
+      <!-- <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
+        <div class="w-56 relative text-slate-500">
+          <input
+            type="text"
+            class="form-control w-56 box pr-10"
+            placeholder="Search..."
+          />
+          <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
+        </div>
+      </div> -->
+    </div>
+    <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+      <table class="table table-report -mt-2">
+        <thead>
+          <tr>
+            <th v-for="(column, index) in columnsTitles" :key="index" :class="column.styles">
+              {{ column.title }}
+            </th>
+            <th class="text-center whitespace-nowrap">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(permission, index) in permissionStore.permissions.data" :key="index" class="intro-x">
+            <td>{{ permission.id }}</td>
+            <td>{{ permission.name }}</td>
+            <td class="table-report__action">
+
+              <div class="flex justify-center items-center">
+                <a class="flex items-center mr-3" href="javascript:;" @click="showEditModal(permission)">
+                  <CheckSquareIcon class="w-4 h-4 mr-1" /> Edit
+                </a>
+                <a class="flex items-center text-danger" href="javascript:;" @click="callDeleteModal(permission.id)">
+                  <Trash2Icon class="w-4 h-4 mr-1" /> Delete
+                </a>
+              </div>
+
+            </td>
+          </tr>
+        </tbody>
+        <Delete :show="deleteConfirmationModal" @closed="deleteConfirmationModal = false"
+          @delete="handleDelete"></Delete>
+      </table>
+    </div>
+
+    <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
+
+      <PaginationComponent class="w-full sm:w-auto sm:mr-auto" :limit="3" :keepLength="false" :data="permissionStore.permissions"
+        @pagination-change-page="permissionStore.fetchPermissions" />
+      <!-- <select class="w-20 form-select box mt-3 sm:mt-0">
+        <option>10</option>
+        <option>25</option>
+        <option>35</option>
+        <option>50</option>
+      </select> -->
+    </div>
+
+    <New :show="newModal" @closed="newModal = false" @save="handleSavePermission"></New>
+    <Edit v-if="permissionToEdit" :show="editModal" :permission="permissionToEdit" @closed="editModal = false" @update="handleUpdatePermission"></Edit>
+  </div>
+</template>
+
+<script setup>
+import { onMounted, ref, reactive, computed } from "vue";
+import { usePermissionStore } from '@/stores/usePermissionStore';
+import PaginationComponent from '@/econome/components/pagination/Main.vue';
+import Delete from "./Delete.vue";
+import New from "./Create.vue";
+import Edit from "./Edit.vue";
+
+// DELETE
+const permissionStore = usePermissionStore();
+const idToDelete = ref();
+const deleteConfirmationModal = ref(false);
+
+function callDeleteModal(id) {
+  deleteConfirmationModal.value = true;
+  idToDelete.value = id;
+}
+
+function handleDelete() {
+  permissionStore.deletePermission(idToDelete.value);
+  permissionStore.fetchPermissions();
+}
+
+// CREATE
+
+const newModal = ref(false);
+
+function showNewModal(){
+  newModal.value = true;
+}
+
+function handleSavePermission(newPermission){
+  permissionStore.createPermission({ name: newPermission.name });
+}
+
+// UPDATE
+
+const editModal = ref(false);
+const permissionToEdit = ref(null);
+
+function showEditModal(permission) {
+  permissionToEdit.value = permission;
+  editModal.value = true;
+}
+
+function handleUpdatePermission(updatedPermission) {
+  permissionStore.updatePermission(updatedPermission.id, { name: updatedPermission.name });
+}
+
+// MODULE INFO
+
+const title = ref('Casatro de Permissões');
+const addButtonText = ref('Adicionar Nova Permissão');
+
+const columnsTitles = reactive([
+  { "title": "ID", "style": "" },
+  { "title": "NOME", "style": "" },
+]);
+
+// INITIAL DATA 
+
+onMounted(async () => {
+  await permissionStore.fetchPermissions();
+});
+
+// PAGINATION
+
+const paginationInfo = computed(() => {
+  if (permissionStore.permissions.data && permissionStore.permissions.data.length > 0) {
+    const from = (permissionStore.permissions.meta.current_page - 1) * permissionStore.permissions.meta.per_page + 1;
+    const to = from + permissionStore.permissions.data.length - 1;
+    const total = permissionStore.permissions.meta.total;
+    return `Exibindo do ${from} ao ${to} de ${total} lançamentos`;
+  }
+  return 'No entries found';
+});
+</script>
