@@ -7,16 +7,20 @@
       <div class="hidden md:block mx-auto text-slate-500">
         {{ paginationInfo }}
       </div>
-      <!-- <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
+      <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
         <div class="w-56 relative text-slate-500">
           <input
             type="text"
             class="form-control w-56 box pr-10"
             placeholder="Search..."
+            v-model="searchQuery"
+            @input="searchPermissions"
           />
-          <SearchIcon class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
+          <Trash2Icon v-if="searchQuery" @click="clearSearch" class="text-red-600 w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
+          <SearchIcon  v-else class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
+          
         </div>
-      </div> -->
+      </div>
     </div>
     <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
       <table class="table table-report -mt-2">
@@ -35,11 +39,20 @@
             <td class="table-report__action">
 
               <div class="flex justify-center items-center">
+                <a class="flex items-center text-theme-9 mr-3" href="javascript:;" @click="showViewModal(permission)">
+                  <Tippy tag="a" href="javascript:;" class="tooltip" content="Visualizar">
+                    <EyeIcon class="w-4 h-4 mr-1" />
+                  </Tippy>
+                </a>
                 <a class="flex items-center mr-3" href="javascript:;" @click="showEditModal(permission)">
-                  <CheckSquareIcon class="w-4 h-4 mr-1" /> Edit
+                  <Tippy tag="a" href="javascript:;" class="tooltip" content="Editar">
+                    <CheckSquareIcon class="w-4 h-4 mr-1" /> 
+                  </Tippy>
                 </a>
                 <a class="flex items-center text-danger" href="javascript:;" @click="callDeleteModal(permission.id)">
-                  <Trash2Icon class="w-4 h-4 mr-1" /> Delete
+                  <Tippy tag="a" href="javascript:;" class="tooltip" content="Deletar">  
+                    <Trash2Icon class="w-4 h-4 mr-1" /> 
+                  </Tippy>
                 </a>
               </div>
 
@@ -65,6 +78,7 @@
 
     <New :show="newModal" @closed="newModal = false" @save="handleSavePermission"></New>
     <Edit v-if="permissionToEdit" :show="editModal" :permission="permissionToEdit" @closed="editModal = false" @update="handleUpdatePermission"></Edit>
+    <View v-if="permissionToView" :show="viewModal" :role="permissionToView" @closed="viewModal = false"></View>
   </div>
 </template>
 
@@ -75,6 +89,30 @@ import PaginationComponent from '@/econome/components/pagination/Main.vue';
 import Delete from "./Delete.vue";
 import New from "./Create.vue";
 import Edit from "./Edit.vue";
+import View from "./View.vue";
+
+// SEARCH
+
+const searchQuery = ref('');
+
+function searchPermissions() {
+  permissionStore.fetchPermissions(1, searchQuery.value);
+}
+
+function clearSearch() {
+  searchQuery.value = '';
+  permissionStore.fetchPermissions(1);
+}
+
+// VIEW
+
+const viewModal = ref(false);
+const permissionToView = ref(null);
+
+function showViewModal(permission) {
+  permissionToView.value = permission;
+  viewModal.value = true;
+}
 
 // DELETE
 const permissionStore = usePermissionStore();

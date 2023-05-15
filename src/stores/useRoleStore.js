@@ -19,10 +19,10 @@ export const useRoleStore = defineStore({
   }),
 
   actions: {
-    async fetchRoles(page = 1) {
+    async fetchRoles(page = 1, query = '') {
       let loader = $loading.show();
       try {
-        const response = await api.get(`/api/v1/roles?page=${page}`);
+        const response = await api.get(`/api/v1/roles?page=${page}&search=${query}`);
         this.roles = response.data;
       } catch (error) {
         console.error('Error fetching roles:', error);

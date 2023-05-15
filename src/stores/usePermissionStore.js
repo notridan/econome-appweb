@@ -19,10 +19,10 @@ export const usePermissionStore = defineStore({
   }),
 
   actions: {
-    async fetchPermissions(page = 1) {
+    async fetchPermissions(page = 1, query = '') {
       let loader = $loading.show();
       try {
-        const response = await api.get(`/api/v1/permissions?page=${page}`);
+        const response = await api.get(`/api/v1/permissions?page=${page}&search=${query}`);
         this.permissions = response.data;
       } catch (error) {
         console.error('Error fetching permissions:', error);
@@ -79,6 +79,8 @@ export const usePermissionStore = defineStore({
         const response = await api.delete(`/api/v1/permissions/${id}`);
 
         toast.success(response.data.message)
+
+        await this.fetchPermissions();
         
       } catch (error) {
         console.error('Error deleting permission:', error);

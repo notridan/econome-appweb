@@ -35,6 +35,7 @@
         </li>
 
             <li class="page-item"
+                v-if="slotProps.computed.lastPage > slotProps.computed.currentPage"
                 :disabled="!slotProps.computed.nextPageUrl"
                 v-on="slotProps.nextButtonEvents"
             >
