@@ -63,7 +63,7 @@
       </select> -->
     </div>
 
-    <New :show="newModal" @closed="newModal = false"></New>
+    <New :show="newModal" @closed="newModal = false" @save="handleSaveRole"></New>
   </div>
 </template>
 
@@ -91,6 +91,12 @@ function handleDelete() {
 
 function showNewModal(){
   newModal.value = true;
+  
+}
+
+function handleSaveRole(newRole){
+  roleStore.createRole({ name: newRole.name });
+  roleStore.fetchRoles();
 }
 
 const title = ref('Casatro de Papéis');

@@ -49,7 +49,8 @@ export const useRoleStore = defineStore({
 
     async createRole(roleData) {
       try {
-        await api.post('/api/v1/roles', roleData);
+        const response = await api.post('/api/v1/roles', roleData);
+        toast.success(response.data.message)
       } catch (error) {
         console.error('Error creating role:', error);
         toast.error('Erro');
