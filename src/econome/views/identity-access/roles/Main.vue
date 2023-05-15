@@ -77,7 +77,7 @@
       </select> -->
     </div>
 
-    <New :show="newModal" @closed="newModal = false" @save="handleSaveRole"></New>
+    <New :info="createInfo" :show="newModal" @closed="newModal = false" @save="handleSaveRole"></New>
     <Edit v-if="roleToEdit" :show="editModal" :role="roleToEdit" @closed="editModal = false" @update="handleUpdateRole"></Edit>
     <View v-if="roleToView" :show="viewModal" :role="roleToView" @closed="viewModal = false"></View>
   </div>
@@ -88,7 +88,7 @@ import { onMounted, ref, reactive, computed } from "vue";
 import { useRoleStore } from '@/stores/useRoleStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
 import Delete from "./Delete.vue";
-import New from "./Create.vue";
+import New from "@/econome/components/crud/Create.vue";
 import Edit from "./Edit.vue";
 import View from "./View.vue";
 
@@ -131,6 +131,17 @@ function handleDelete() {
 }
 
 // CREATE
+
+const createInfo = {
+  title: 'Novo Papel',
+  fields: [
+    {
+      'name': 'Name',
+      'type': 'text',
+      'placeholder': 'Digite o nome do papel'
+    }
+  ]
+};
 
 const newModal = ref(false);
 

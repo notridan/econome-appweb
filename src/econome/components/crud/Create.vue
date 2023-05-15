@@ -2,13 +2,13 @@
     <Modal size="modal-lg" :slideOver="true" :show="show" @hidden="closeModal">
         <ModalHeader class="p-5">
             <h2 class="font-medium text-base mr-auto">
-                Nova Permissão
+                {{ info.title }}
             </h2>
         </ModalHeader>
         <ModalBody>
-            <div>
-                <label for="modal-form-1" class="form-label">Nome</label>
-                <input id="modal-form-1" type="text" class="form-control" placeholder="Digite o nome da Permissão" v-model="name" @keyup.enter="saveData"/>
+            <div v-for="(field, index) in info.fields" :key="index">
+                <label :for="`modal-form-${index}`" class="form-label">{{ field.name }}</label>
+                <input :id="`modal-form-${index}`" :type="field.type" class="form-control" :placeholder="field.placeholder" v-model="form[field.name]" @keyup.enter="saveData"/>
             </div>
         </ModalBody>
         <ModalFooter class="w-full absolute bottom-0">
@@ -23,13 +23,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 
 const props = defineProps({
   show: {
     type: Boolean,
     required: true,
   },
+  info: {
+    type: Object,
+    required: true
+  }
 });
 
 const emit = defineEmits(["save", "update:show", "closed"]);
@@ -40,11 +44,10 @@ const closeModal = () => {
 };
 
 const saveData = () => {
-  emit("save", { name: name.value });
-  name.value = '';
+  emit("save", form);
+  Object.keys(form).forEach(key => form[key] = '');
   closeModal();
 };
 
-
-const name = ref('');
+const form = reactive({});
 </script>

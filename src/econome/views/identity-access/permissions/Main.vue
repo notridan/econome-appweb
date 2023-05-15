@@ -76,7 +76,7 @@
       </select> -->
     </div>
 
-    <New :show="newModal" @closed="newModal = false" @save="handleSavePermission"></New>
+    <New :info="createInfo" :show="newModal" @closed="newModal = false" @save="handleSavePermission"></New>
     <Edit v-if="permissionToEdit" :show="editModal" :permission="permissionToEdit" @closed="editModal = false" @update="handleUpdatePermission"></Edit>
     <View v-if="permissionToView" :show="viewModal" :role="permissionToView" @closed="viewModal = false"></View>
   </div>
@@ -87,7 +87,7 @@ import { onMounted, ref, reactive, computed } from "vue";
 import { usePermissionStore } from '@/stores/usePermissionStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
 import Delete from "./Delete.vue";
-import New from "./Create.vue";
+import New from "@/econome/components/crud/Create.vue";
 import Edit from "./Edit.vue";
 import View from "./View.vue";
 
@@ -130,6 +130,10 @@ function handleDelete() {
 }
 
 // CREATE
+
+const createInfo = {
+  title: 'Novo Papel'
+};
 
 const newModal = ref(false);
 
