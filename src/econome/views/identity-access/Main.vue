@@ -35,7 +35,7 @@
             <td class="table-report__action">
 
               <div class="flex justify-center items-center">
-                <a class="flex items-center mr-3" href="javascript:;">
+                <a class="flex items-center mr-3" href="javascript:;" @click="showEditModal(role)">
                   <CheckSquareIcon class="w-4 h-4 mr-1" /> Edit
                 </a>
                 <a class="flex items-center text-danger" href="javascript:;" @click="callDeleteModal(role.id)">
@@ -64,6 +64,7 @@
     </div>
 
     <New :show="newModal" @closed="newModal = false" @save="handleSaveRole"></New>
+    <Edit :show="editModal" :role="roleToEdit" @closed="editModal = false" @update="handleUpdateRole"></Edit>
   </div>
 </template>
 
@@ -73,8 +74,22 @@ import { useRoleStore } from '@/stores/useRoleStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
 import DeleteConfirmation from "./DeleteConfirmation.vue";
 import New from "./New.vue";
+import Edit from "./Edit.vue";
 
 const roleStore = useRoleStore();
+
+const editModal = ref(false);
+const roleToEdit = ref(null);
+
+function showEditModal(role) {
+  roleToEdit.value = role;
+  editModal.value = true;
+}
+
+function handleUpdateRole(updatedRole) {
+  roleStore.updateRole(updatedRole.id, { name: updatedRole.name });
+  roleStore.fetchRoles();
+}
 
 const deleteConfirmationModal = ref(false);
 const newModal = ref(false);

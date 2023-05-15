@@ -59,7 +59,8 @@ export const useRoleStore = defineStore({
 
     async updateRole(id, roleData) {
       try {
-        await api.put(`/api/v1/roles/${id}`, roleData);
+        const response = await api.put(`/api/v1/roles/${id}`, roleData);
+        toast.success(response.data.message);
       } catch (error) {
         console.error('Error updating role:', error);
         toast.error('Erro');
