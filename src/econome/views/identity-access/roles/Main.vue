@@ -78,8 +78,8 @@
     </div>
 
     <New :info="createInfo" :show="newModal" @closed="newModal = false" @save="handleSaveRole"></New>
-    <Edit v-if="roleToEdit" :show="editModal" :role="roleToEdit" @closed="editModal = false" @update="handleUpdateRole"></Edit>
-    <View v-if="roleToView" :show="viewModal" :role="roleToView" @closed="viewModal = false"></View>
+    <Edit :info="editInfo" v-if="roleToEdit" :show="editModal" :entity="roleToEdit" @closed="editModal = false" @update="handleUpdateRole"></Edit>
+    <View :info="viewInfo" v-if="roleToView" :show="viewModal" :entity="roleToView" @closed="viewModal = false"></View>
   </div>
 </template>
 
@@ -87,10 +87,10 @@
 import { onMounted, ref, reactive, computed } from "vue";
 import { useRoleStore } from '@/stores/useRoleStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
-import Delete from "./Delete.vue";
+import Delete from "@/econome/components/crud/Delete.vue";
 import New from "@/econome/components/crud/Create.vue";
-import Edit from "./Edit.vue";
-import View from "./View.vue";
+import Edit from "@/econome/components/crud/Edit.vue";
+import View from "@/econome/components/crud/View.vue";
 
 // SEARCH
 
@@ -106,6 +106,23 @@ function clearSearch() {
 }
 
 // VIEW
+
+const viewInfo = {
+  title: 'Visualizar Papel',
+  fields: [
+    {
+      'title': 'ID',
+      'model': 'id',
+      'type': 'text',
+    },
+    {
+      'title': 'Nome',
+      'model': 'name',
+      'type': 'text',
+    },
+    // Adicione mais campos conforme necessário
+  ]
+};
 
 const viewModal = ref(false);
 const roleToView = ref(null);
@@ -136,7 +153,8 @@ const createInfo = {
   title: 'Novo Papel',
   fields: [
     {
-      'name': 'Name',
+      'title': 'Name',
+      'model': 'name',
       'type': 'text',
       'placeholder': 'Digite o nome do papel'
     }
@@ -150,10 +168,22 @@ function showNewModal(){
 }
 
 function handleSaveRole(newRole){
-  roleStore.createRole({ name: newRole.name });
+  roleStore.createRole(newRole);
 }
 
 // UPDATE
+
+const editInfo = {
+  title: 'Editar Papel',
+  fields: [
+    {
+      'title': 'name',
+      'model': 'name',
+      'type': 'text',
+      'placeholder': 'Digite o nome'
+    }
+  ]
+};
 
 const editModal = ref(false);
 const roleToEdit = ref(null);
@@ -164,7 +194,7 @@ function showEditModal(role) {
 }
 
 function handleUpdateRole(updatedRole) {
-  roleStore.updateRole(updatedRole.id, { name: updatedRole.name });
+  roleStore.updateRole(updatedRole.id, updatedRole);
 }
 
 // MODULE INFO

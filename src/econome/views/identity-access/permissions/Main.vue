@@ -77,8 +77,8 @@
     </div>
 
     <New :info="createInfo" :show="newModal" @closed="newModal = false" @save="handleSavePermission"></New>
-    <Edit v-if="permissionToEdit" :show="editModal" :permission="permissionToEdit" @closed="editModal = false" @update="handleUpdatePermission"></Edit>
-    <View v-if="permissionToView" :show="viewModal" :role="permissionToView" @closed="viewModal = false"></View>
+    <Edit  :info="editInfo" v-if="permissionToEdit" :show="editModal" :entity="permissionToEdit" @closed="editModal = false" @update="handleUpdatePermission"></Edit>
+    <View :info="viewInfo" v-if="permissionToView" :show="viewModal" :entity="permissionToView" @closed="viewModal = false"></View>
   </div>
 </template>
 
@@ -86,10 +86,10 @@
 import { onMounted, ref, reactive, computed } from "vue";
 import { usePermissionStore } from '@/stores/usePermissionStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
-import Delete from "./Delete.vue";
+import Delete from "@/econome/components/crud/Delete.vue";
 import New from "@/econome/components/crud/Create.vue";
-import Edit from "./Edit.vue";
-import View from "./View.vue";
+import Edit from "@/econome/components/crud/Edit.vue";
+import View from "@/econome/components/crud/View.vue";
 
 // SEARCH
 
@@ -105,6 +105,23 @@ function clearSearch() {
 }
 
 // VIEW
+
+const viewInfo = {
+  title: 'Visualizar Papel',
+  fields: [
+    {
+      'title': 'ID',
+      'model': 'id',
+      'type': 'text',
+    },
+    {
+      'title': 'Nome',
+      'model': 'name',
+      'type': 'text',
+    },
+    // Adicione mais campos conforme necessário
+  ]
+};
 
 const viewModal = ref(false);
 const permissionToView = ref(null);
@@ -132,8 +149,17 @@ function handleDelete() {
 // CREATE
 
 const createInfo = {
-  title: 'Novo Papel'
+  title: 'Nova Permissão',
+  fields: [
+    {
+      'title': 'Name',
+      'model': 'name',
+      'type': 'text',
+      'placeholder': 'Digite o nome da Permissão'
+    }
+  ]
 };
+
 
 const newModal = ref(false);
 
@@ -142,10 +168,22 @@ function showNewModal(){
 }
 
 function handleSavePermission(newPermission){
-  permissionStore.createPermission({ name: newPermission.name });
+  permissionStore.createPermission(newPermission);
 }
 
 // UPDATE
+
+const editInfo = {
+  title: 'Editar Permissão',
+  fields: [
+    {
+      'title': 'name',
+      'model': 'name',
+      'type': 'text',
+      'placeholder': 'Digite o nome'
+    }
+  ]
+};
 
 const editModal = ref(false);
 const permissionToEdit = ref(null);
@@ -156,7 +194,7 @@ function showEditModal(permission) {
 }
 
 function handleUpdatePermission(updatedPermission) {
-  permissionStore.updatePermission(updatedPermission.id, { name: updatedPermission.name });
+  permissionStore.updatePermission(updatedPermission.id, updatedPermission);
 }
 
 // MODULE INFO
