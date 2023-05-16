@@ -129,7 +129,7 @@ const viewModal = ref(false);
 const permissionToView = ref(null);
 
 async function showViewModal(permission) {
-  await permissionStore.fetchPermissions(permission.id);
+  await permissionStore.fetchPermission(permission.id);
   permissionToView.value = permissionStore.permission.data;
   viewModal.value = true;
 }
