@@ -92,6 +92,8 @@ import New from "@/econome/components/crud/Create.vue";
 import Edit from "@/econome/components/crud/Edit.vue";
 import View from "@/econome/components/crud/View.vue";
 
+const roleStore = useRoleStore();
+
 // SEARCH
 
 const searchQuery = ref('');
@@ -128,12 +130,12 @@ const viewModal = ref(false);
 const roleToView = ref(null);
 
 function showViewModal(role) {
-  roleToView.value = role;
+  roleStore.fetchRole(role.id);
+  roleToView.value = roleStore.role.data;
   viewModal.value = true;
 }
 
 // DELETE
-const roleStore = useRoleStore();
 const idToDelete = ref();
 const deleteConfirmationModal = ref(false);
 
