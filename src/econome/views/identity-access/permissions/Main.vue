@@ -91,6 +91,8 @@ import New from "@/econome/components/crud/Create.vue";
 import Edit from "@/econome/components/crud/Edit.vue";
 import View from "@/econome/components/crud/View.vue";
 
+const permissionStore = usePermissionStore();
+
 // SEARCH
 
 const searchQuery = ref('');
@@ -126,13 +128,13 @@ const viewInfo = {
 const viewModal = ref(false);
 const permissionToView = ref(null);
 
-function showViewModal(permission) {
-  permissionToView.value = permission;
+async function showViewModal(permission) {
+  await permissionStore.fetchPermissions(permission.id);
+  permissionToView.value = permissionStore.permission.data;
   viewModal.value = true;
 }
 
 // DELETE
-const permissionStore = usePermissionStore();
 const idToDelete = ref();
 const deleteConfirmationModal = ref(false);
 

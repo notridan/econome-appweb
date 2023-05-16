@@ -129,8 +129,8 @@ const viewInfo = {
 const viewModal = ref(false);
 const roleToView = ref(null);
 
-function showViewModal(role) {
-  roleStore.fetchRole(role.id);
+async function showViewModal(role) {
+  await roleStore.fetchRole(role.id);
   roleToView.value = roleStore.role.data;
   viewModal.value = true;
 }
