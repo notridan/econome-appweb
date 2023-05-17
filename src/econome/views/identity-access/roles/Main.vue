@@ -89,7 +89,7 @@ import { useRoleStore } from '@/stores/useRoleStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
 import Delete from "@/econome/components/crud/Delete.vue";
 import New from "@/econome/components/crud/Create.vue";
-import Edit from "@/econome/components/crud/Edit.vue";
+import Edit from "@/econome/components/crud/EditNested.vue";
 import View from "@/econome/components/crud/View.vue";
 
 const roleStore = useRoleStore();
@@ -190,8 +190,9 @@ const editInfo = {
 const editModal = ref(false);
 const roleToEdit = ref(null);
 
-function showEditModal(role) {
-  roleToEdit.value = role;
+async function showEditModal(role) {
+  await roleStore.fetchRole(role.id);
+  roleToEdit.value = roleStore.role.data;
   editModal.value = true;
 }
 

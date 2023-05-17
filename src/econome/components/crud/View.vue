@@ -46,8 +46,8 @@
   
   const entity = ref({});
   
-  watchEffect(() => {
-      entity.value = props.entity ? props.entity : {};
+  watchEffect(() => { 
+    entity.value = props.entity ? props.entity : {};
   });
   </script>
   
