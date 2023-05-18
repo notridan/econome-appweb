@@ -29,10 +29,15 @@ export const useMainMenuStore = defineStore("mainMenu", {
             pageName: "identity-access-permissions",
             title: "Permissões"
           },
+          // {
+          //   icon: "",
+          //   pageName: "identity-access-modules",
+          //   title: "Módulos"
+          // },
           {
             icon: "",
-            pageName: "identity-access-modules",
-            title: "Módulos"
+            pageName: "identity-access-users",
+            title: "Usuários"
           }
         ]
       },

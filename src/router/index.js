@@ -5,7 +5,8 @@ import Dashboard from "../econome/views/dashboard/Main.vue";
 import Settings from "../econome/views/settings/Main.vue";
 import Roles from "../econome/views/identity-access/roles/Main.vue";
 import Permissions from "../econome/views/identity-access/permissions/Main.vue";
-import Modules from "../econome/views/identity-access/modules/Main.vue";
+// import Modules from "../econome/views/identity-access/modules/Main.vue";
+import Users from "../econome/views/identity-access/users/Main.vue";
 import Login from "../econome/views/login/Main.vue";
 import ForgotPassword from "../econome/views/forgot-password/Main.vue";
 import ResetPassword from "../econome/views/reset-password/Main.vue";
@@ -49,13 +50,21 @@ const routes = [
         }
       },
       {
-        path: "/identity-access/modules",
-        name: "identity-access-modules",
-        component: Modules,
+        path: "/identity-access/users",
+        name: "identity-access-users",
+        component: Users,
         meta: {
           requiresAuth: true
         }
       },
+      // {
+      //   path: "/identity-access/modules",
+      //   name: "identity-access-modules",
+      //   component: Modules,
+      //   meta: {
+      //     requiresAuth: true
+      //   }
+      // },
     ],
   },
   {
