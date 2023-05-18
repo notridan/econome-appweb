@@ -184,6 +184,13 @@ const createInfo = {
       'type': 'password',
       'placeholder': 'Digite a senha do Usuário',
     },
+    {
+      'title': 'Role',
+      'model': 'role',
+      'type': 'select',
+      'placeholder': 'Select Role',
+      'options': ['Admin', 'Editor', 'Viewer'] // Add your role options here
+    },
   ]
 };
 
@@ -215,10 +222,17 @@ const editInfo = {
       'placeholder': 'Digite o email'
     },
     {
-      'title': 'Papel',
+      'title': 'Senha',
+      'model': 'password',
+      'type': 'password',
+      'placeholder': 'Digite a senha do Usuário',
+    },
+    {
+      'title': 'Role',
       'model': 'role',
-      'type': 'text',
-      'placeholder': 'Digite o Papel'
+      'type': 'select',
+      'placeholder': 'Select Role',
+      'options': ['Admin', 'Editor', 'Viewer'] // Add your role options here
     },
   ]
 };

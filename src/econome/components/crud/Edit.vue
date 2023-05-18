@@ -8,7 +8,14 @@
       <ModalBody>
           <div v-for="(field, index) in info.fields" :key="index">
               <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
-              <input :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData" />
+              <template v-if="field.type === 'select'">
+                  <select :id="`modal-form-${index}`" class="form-control mb-4" v-model="form[field.model]">
+                      <option v-for="option in field.options" :key="option" :value="option">{{ option }}</option>
+                  </select>
+              </template>
+              <template v-else>
+                  <input :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData" />
+              </template>
           </div>
       </ModalBody>
       <ModalFooter class="w-full absolute bottom-0">
