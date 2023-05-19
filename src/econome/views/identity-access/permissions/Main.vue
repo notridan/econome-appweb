@@ -190,8 +190,9 @@ const editInfo = {
 const editModal = ref(false);
 const permissionToEdit = ref(null);
 
-function showEditModal(permission) {
-  permissionToEdit.value = permission;
+async function showEditModal(permission) {
+  await permissionStore.fetchPermission(permission.id);
+  permissionToEdit.value = permissionStore.permission.data;
   editModal.value = true;
 }
 

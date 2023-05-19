@@ -93,8 +93,11 @@ import Delete from "@/econome/components/crud/Delete.vue";
 import New from "@/econome/components/crud/Create.vue";
 import Edit from "@/econome/components/crud/Edit.vue";
 import View from "@/econome/components/crud/View.vue";
+import api from '@/utils/api.js'
 
 const userStore = useUserStore();
+
+const roleOptions = reactive([]);
 
 // SEARCH
 
@@ -232,7 +235,7 @@ const editInfo = {
       'model': 'role',
       'type': 'select',
       'placeholder': 'Select Role',
-      'options': ['Admin', 'Editor', 'Viewer'] // Add your role options here
+      'options': roleOptions.value // Add your role options here
     },
   ]
 };
@@ -240,8 +243,9 @@ const editInfo = {
 const editModal = ref(false);
 const userToEdit = ref(null);
 
-function showEditModal(user) {
-  userToEdit.value = user;
+async function showEditModal(user) {
+  await userStore.fetchUser(user.id);
+  userToEdit.value = userStore.user.data;
   editModal.value = true;
 }
 
@@ -265,7 +269,20 @@ const columnsTitles = reactive([
 
 onMounted(async () => {
   await userStore.fetchUsers();
+  await fetchRoleOptions();
 });
+
+// GET AVAILABLE ROLES
+
+async function fetchRoleOptions() {
+  try {
+    const response = await api.get('/api/v1/roles-available');
+    roleOptions.value = response.data;
+    console.log(roleOptions.value);
+  } catch (error) {
+    console.error('Erro ao buscar as opções de função', error);
+  }
+}
 
 // PAGINATION
 
