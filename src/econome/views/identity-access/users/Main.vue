@@ -27,32 +27,31 @@
         <table class="table table-report -mt-2">
           <thead>
             <tr>
-              <th v-for="(column, index) in columnsTitles" :key="index" :class="column.styles">
+              <th v-for="(column, index) in columns" :key="index" :class="column.header_styles">
                 {{ column.title }}
               </th>
               <th class="text-center whitespace-nowrap">Ações</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in userStore.users.data" :key="index" class="intro-x">
-              <td>{{ user.id }}</td>
-              <td>{{ user.name }}</td>
-              <td>{{ user.email }}</td>
-              <td>{{ user.role_name }}</td>
+            <tr v-for="(entity, index) in userStore.users.data" :key="index" class="intro-x">
+              <td v-for="column in columns" :key="column.model" :class="column.row_styles">
+                {{ entity[column.model] }}
+              </td>
               <td class="table-report__action">
   
                 <div class="flex justify-center items-center">
-                  <a class="flex items-center text-theme-9 mr-3" href="javascript:;" @click="showViewModal(user)">
+                  <a class="flex items-center text-theme-9 mr-3" href="javascript:;" @click="showViewModal(entity)">
                     <Tippy tag="a" href="javascript:;" class="tooltip" content="Visualizar">
                       <EyeIcon class="w-4 h-4 mr-1" />
                     </Tippy>
                   </a>
-                  <a class="flex items-center mr-3" href="javascript:;" @click="showEditModal(user)">
+                  <a class="flex items-center mr-3" href="javascript:;" @click="showEditModal(entity)">
                     <Tippy tag="a" href="javascript:;" class="tooltip" content="Editar">
                       <CheckSquareIcon class="w-4 h-4 mr-1" /> 
                     </Tippy>
                   </a>
-                  <a class="flex items-center text-danger" href="javascript:;" @click="callDeleteModal(user.id)">
+                  <a class="flex items-center text-danger" href="javascript:;" @click="callDeleteModal(entity.id)">
                     <Tippy tag="a" href="javascript:;" class="tooltip" content="Deletar">  
                       <Trash2Icon class="w-4 h-4 mr-1" /> 
                     </Tippy>
@@ -79,7 +78,7 @@
       </select> -->
     </div>
 
-    <New :info="createInfo" :show="newModal" @closed="newModal = false" @save="handleSaveUser"></New>
+    <New :info="createInfo" :show="newModal" @closed="newModal = false" @save="handleSaveNew"></New>
     <Edit  :info="editInfo" v-if="userToEdit" :show="editModal" :entity="userToEdit" @closed="editModal = false" @update="handleUpdateUser"></Edit>
     <View :info="viewInfo" v-if="userToView" :show="viewModal" :entity="userToView" @closed="viewModal = false"></View>
   </div>
@@ -201,8 +200,8 @@ function showNewModal(){
   newModal.value = true;
 }
 
-function handleSaveUser(newUser){
-  userStore.createUser(newUser);
+function handleSaveNew(newEntity){
+  userStore.createUser(newEntity);
 }
 
 // UPDATE
@@ -257,11 +256,11 @@ function handleUpdateUser(updatedUser) {
 const title = ref('Cadastro de Usuários');
 const addButtonText = ref('Adicionar Novo Usuário');
 
-const columnsTitles = reactive([
-  { "title": "ID", "style": "" },
-  { "title": "NOME", "style": "" },
-  { "title": "EMAIL", "style": "" },
-  { "title": "PAPEL", "style": "" },
+const columns = reactive([
+  { "title": "ID", "model": "id", "header_styles": "", "row_styles": "" },
+  { "title": "NOME", "model": "name", "header_styles": "", "row_styles": "" },
+  { "title": "EMAIL", "model": "email", "header_style": "", "row_styles": "" },
+  { "title": "PAPEL", "model": "role_name", "header_styles": "", "row_styles": "" },
 ]);
 
 // INITIAL DATA 
