@@ -5,7 +5,7 @@
         <button @click="showNewModal" class="btn btn-primary shadow-md mr-2">{{ addButtonText }}</button>
   
         <div class="hidden md:block mx-auto text-slate-500">
-          {{ paginationInfo }}
+          <!-- {{ paginationInfo }} -->
         </div>
         <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
           <div class="w-56 relative text-slate-500">
@@ -15,7 +15,7 @@
               placeholder="Search..."
               autocomplete="new-password"
               v-model="searchQuery"
-              @input="searchUsers"
+              @input="searchItems"
             />
             <Trash2Icon v-if="searchQuery" @click="clearSearch" class="text-red-600 w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
             <SearchIcon  v-else class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
@@ -33,8 +33,8 @@
               <th class="text-center whitespace-nowrap">Ações</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="(entity, index) in userStore.users.data" :key="index" class="intro-x">
+          <tbody v-if="entityStore.items && entityStore.items.data">
+            <tr v-for="(entity, index) in entityStore.items.data" :key="index" class="intro-x">
               <td v-for="column in columns" :key="column.model" :class="column.row_styles">
                 {{ entity[column.model] }}
               </td>
@@ -68,8 +68,8 @@
   
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
   
-        <PaginationComponent class="w-full sm:w-auto sm:mr-auto" :limit="3" :keepLength="false" :data="userStore.users"
-          @pagination-change-page="userStore.fetchUsers" />
+        <!-- <PaginationComponent class="w-full sm:w-auto sm:mr-auto" :limit="3" :keepLength="false" :data="entityStore.items"
+          @pagination-change-page="entityStore.fetchItems" /> -->
       <!-- <select class="w-20 form-select box mt-3 sm:mt-0">
         <option>10</option>
         <option>25</option>
@@ -78,34 +78,35 @@
       </select> -->
     </div>
 
-    <New :info="createInfo" :show="newModal" @closed="newModal = false" @save="handleSaveNew"></New>
-    <Edit  :info="editInfo" v-if="userToEdit" :show="editModal" :entity="userToEdit" @closed="editModal = false" @update="handleUpdateUser"></Edit>
-    <View :info="viewInfo" v-if="userToView" :show="viewModal" :entity="userToView" @closed="viewModal = false"></View>
+    <New :info="createInfo" :show="newModal" @closed="newModal = false" @save="handleSaveNewItem"></New>
+    <Edit  :info="editInfo" v-if="itemToEdit" :show="editModal" :entity="itemToEdit" @closed="editModal = false" @update="handleUpdateItem"></Edit>
+    <View :info="viewInfo" v-if="itemToView" :show="viewModal" :entity="itemToView" @closed="viewModal = false"></View>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref, reactive, computed } from "vue";
-import { useUserStore } from '@/stores/useUserStore';
+import { createGenericStore } from '@/stores/useGenericStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
 import Delete from "@/econome/components/crud/Delete.vue";
 import New from "@/econome/components/crud/Create.vue";
 import Edit from "@/econome/components/crud/Edit.vue";
 import View from "@/econome/components/crud/View.vue";
 
-const userStore = useUserStore();
+const useEntityStore = createGenericStore('users');
+const entityStore = useEntityStore();
 
 // SEARCH
 
 const searchQuery = ref('');
 
-function searchUsers() {
-  userStore.fetchUsers(1, searchQuery.value);
+function searchItems() {
+  entityStore.fetchItems(1, searchQuery.value);
 }
 
 function clearSearch() {
   searchQuery.value = '';
-  userStore.fetchUsers(1);
+  entityStore.fetchItems(1);
 }
 
 // VIEW
@@ -138,11 +139,11 @@ const viewInfo = {
 };
 
 const viewModal = ref(false);
-const userToView = ref(null);
+const itemToView = ref(null);
 
-async function showViewModal(user) {
-  await userStore.fetchUser(user.id);
-  userToView.value = userStore.user.data;
+async function showViewModal(item) {
+  await entityStore.fetchItem(item.id);
+  itemToView.value = entityStore.item.data;
   viewModal.value = true;
 }
 
@@ -156,8 +157,8 @@ function callDeleteModal(id) {
 }
 
 function handleDelete() {
-  userStore.deleteUser(idToDelete.value);
-  userStore.fetchUsers();
+  entityStore.deleteItem(idToDelete.value);
+  entityStore.fetchItems();
 }
 
 // CREATE
@@ -200,8 +201,8 @@ function showNewModal(){
   newModal.value = true;
 }
 
-function handleSaveNew(newEntity){
-  userStore.createUser(newEntity);
+function handleSaveNewItem(newEntity){
+  entityStore.createItem(newEntity);
 }
 
 // UPDATE
@@ -239,16 +240,16 @@ const editInfo = {
 };
 
 const editModal = ref(false);
-const userToEdit = ref(null);
+const itemToEdit = ref(null);
 
-async function showEditModal(user) {
-  await userStore.fetchUser(user.id);
-  userToEdit.value = userStore.user.data;
+async function showEditModal(item) {
+  await entityStore.fetchItem(item.id);
+  itemToEdit.value = entityStore.item.data;
   editModal.value = true;
 }
 
-function handleUpdateUser(updatedUser) {
-  userStore.updateUser(updatedUser.id, updatedUser);
+function handleUpdateItem(updatedItem) {
+  entityStore.updateItem(updatedItem.id, updatedItem);
 }
 
 // MODULE INFO
@@ -266,18 +267,19 @@ const columns = reactive([
 // INITIAL DATA 
 
 onMounted(async () => {
-  await userStore.fetchUsers();
+  await entityStore.fetchItems();
+  console.log(entityStore.items);
 });
 
 // PAGINATION
 
-const paginationInfo = computed(() => {
-  if (userStore.users.data && userStore.users.data.length > 0) {
-    const from = (userStore.users.meta.current_page - 1) * userStore.users.meta.per_page + 1;
-    const to = from + userStore.users.data.length - 1;
-    const total = userStore.users.meta.total;
-    return `Exibindo do ${from} ao ${to} de ${total} lançamentos`;
-  }
-  return 'No entries found';
-});
+// const paginationInfo = computed(() => {
+//   if (entityStore.items && entityStore.items.data && entityStore.items.data.length > 0) {
+//     const from = (entityStore.items.meta.current_page - 1) * entityStore.items.meta.per_page + 1;
+//     const to = from + entityStore.items.data.length - 1;
+//     const total = entityStore.items.meta.total;
+//     return `Exibindo do ${from} ao ${to} de ${total} lançamentos`;
+//   }
+//   return 'No entries found';
+// });
 </script>
