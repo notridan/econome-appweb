@@ -7,14 +7,16 @@
       </ModalHeader>
       <ModalBody>
           <div v-for="(field, index) in info.fields" :key="index">
-              <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
-              <input v-if="field.type !== 'select'" autocomplete="new-password" :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData"/>
-              <select v-else-if="field.type === 'select'" :id="`modal-form-${index}`" class="form-control mb-4" v-model="form[field.model]" @keyup.enter="saveData">
-                <option disabled value="null">{{ field.placeholder }}</option>
-                <option v-for="(option, index) in getOptions(field)" :key="index" :value="option.id">
-                  {{ option.name }}
-                </option>
-              </select>
+              <div v-if="field.create != false">
+                <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
+                <input v-if="field.type !== 'select'" autocomplete="new-password" :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData"/>
+                <select v-else-if="field.type === 'select'" :id="`modal-form-${index}`" class="form-control mb-4" v-model="form[field.model]" @keyup.enter="saveData">
+                  <option disabled value="null">{{ field.placeholder }}</option>
+                  <option v-for="(option, index) in getOptions(field)" :key="index" :value="option.id">
+                    {{ option.name }}
+                  </option>
+                </select>
+              </div>
           </div>
       </ModalBody>
       <ModalFooter class="w-full absolute bottom-0">

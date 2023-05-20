@@ -7,8 +7,10 @@
         </ModalHeader>
         <ModalBody>
             <div v-for="(field, index) in info.fields" :key="index">
-                <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
-                <input :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" v-model="entity[field.model]" readonly />
+                <div v-if="field.view != false">
+                  <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
+                  <input :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" v-model="entity[field.model]" readonly />
+                </div>
             </div>
         </ModalBody>
         <ModalFooter class="w-full absolute bottom-0">

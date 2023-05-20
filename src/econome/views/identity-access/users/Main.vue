@@ -5,7 +5,7 @@
         <button @click="showNewModal" class="btn btn-primary shadow-md mr-2">{{ addButtonText }}</button>
   
         <div class="hidden md:block mx-auto text-slate-500">
-          <!-- {{ paginationInfo }} -->
+          {{ paginationInfo }}
         </div>
         <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
           <div class="w-56 relative text-slate-500">
@@ -78,9 +78,9 @@
       </select> -->
     </div>
 
-    <New :info="createInfo" :show="newModal" @closed="newModal = false" @save="handleSaveNewItem"></New>
-    <Edit  :info="editInfo" v-if="itemToEdit" :show="editModal" :entity="itemToEdit" @closed="editModal = false" @update="handleUpdateItem"></Edit>
-    <View :info="viewInfo" v-if="itemToView" :show="viewModal" :entity="itemToView" @closed="viewModal = false"></View>
+    <New :info="entityInfo" :show="newModal" @closed="newModal = false" @save="handleSaveNewItem"></New>
+    <Edit  :info="entityInfo" v-if="itemToEdit" :show="editModal" :entity="itemToEdit" @closed="editModal = false" @update="handleUpdateItem"></Edit>
+    <View :info="entityInfo" v-if="itemToView" :show="viewModal" :entity="itemToView" @closed="viewModal = false"></View>
   </div>
 </template>
 
@@ -92,6 +92,66 @@ import Delete from "@/econome/components/crud/Delete.vue";
 import New from "@/econome/components/crud/Create.vue";
 import Edit from "@/econome/components/crud/Edit.vue";
 import View from "@/econome/components/crud/View.vue";
+
+// MODULE INFO
+
+const title = ref('Cadastro de Usuários');
+const addButtonText = ref('Adicionar Novo Usuário');
+
+const columns = reactive([
+  { "title": "ID", "model": "id", "header_styles": "", "row_styles": "" },
+  { "title": "NOME", "model": "name", "header_styles": "", "row_styles": "" },
+  { "title": "EMAIL", "model": "email", "header_style": "", "row_styles": "" },
+  { "title": "PAPEL", "model": "role_name", "header_styles": "", "row_styles": "" },
+]);
+
+const entityInfo = {
+  title: 'Visualizar Usuário',
+  fields: [
+    {
+      'title': 'ID',
+      'model': 'id',
+      'type': 'text',
+      'edit': false,
+      'create': false
+    },
+    {
+      'title': 'Nome',
+      'model': 'name',
+      'type': 'text',
+      'placeholder': 'Digite o nome do Usuário'
+    },
+    {
+      'title': 'Email',
+      'model': 'email',
+      'type': 'text',
+      'placeholder': 'Digite o email do Usuário'
+    },
+    {
+      'title': 'Senha',
+      'model': 'password',
+      'type': 'password',
+      'placeholder': 'Digite a senha do Usuário',
+      'view': false
+    },
+    {
+      'title': 'Papel',
+      'model': 'role_id',
+      'type': 'select',
+      'placeholder': 'Selecione um papel',
+      // 'options': ['teste', 'sysadmin', 'outros'], // when array of strings
+      'url_options': '/api/v1/roles-available',// wher options come from a url
+      'view': false
+    },{
+      'title': 'Papel',
+      'model': 'role_name',
+      'type': 'text',
+      'edit': false,
+      'create': false
+    }
+    // Adicione mais campos conforme necessário
+  ]
+};
 
 const useEntityStore = createGenericStore('users');
 const entityStore = useEntityStore();
@@ -110,33 +170,6 @@ function clearSearch() {
 }
 
 // VIEW
-
-const viewInfo = {
-  title: 'Visualizar Usuário',
-  fields: [
-    {
-      'title': 'ID',
-      'model': 'id',
-      'type': 'text',
-    },
-    {
-      'title': 'Nome',
-      'model': 'name',
-      'type': 'text',
-    },
-    {
-      'title': 'Email',
-      'model': 'email',
-      'type': 'text',
-    },
-    {
-      'title': 'Papel',
-      'model': 'role_name',
-      'type': 'text',
-    },
-    // Adicione mais campos conforme necessário
-  ]
-};
 
 const viewModal = ref(false);
 const itemToView = ref(null);
@@ -163,38 +196,6 @@ function handleDelete() {
 
 // CREATE
 
-const createInfo = {
-  title: 'Novo Usuário',
-  fields: [
-    {
-      'title': 'Name',
-      'model': 'name',
-      'type': 'text',
-      'placeholder': 'Digite o nome do Usuário'
-    },
-    {
-      'title': 'Email',
-      'model': 'email',
-      'type': 'text',
-      'placeholder': 'Digite o email do Usuário'
-    },
-    {
-      'title': 'Senha',
-      'model': 'password',
-      'type': 'password',
-      'placeholder': 'Digite a senha do Usuário',
-    },
-    {
-      'title': 'Papel',
-      'model': 'role_id',
-      'type': 'select',
-      'placeholder': 'Selecione um papel',
-      // 'options': ['teste', 'sysadmin', 'outros'], // when array of strings
-      'url_options': '/api/v1/roles-available',// wher options come from a url
-    },
-  ]
-};
-
 const newModal = ref(false);
 
 function showNewModal(){
@@ -206,38 +207,6 @@ function handleSaveNewItem(newEntity){
 }
 
 // UPDATE
-
-const editInfo = {
-  title: 'Editar Usuário',
-  fields: [
-    {
-      'title': 'name',
-      'model': 'name',
-      'type': 'text',
-      'placeholder': 'Digite o nome'
-    },
-    {
-      'title': 'Email',
-      'model': 'email',
-      'type': 'text',
-      'placeholder': 'Digite o email'
-    },
-    {
-      'title': 'Senha',
-      'model': 'password',
-      'type': 'password',
-      'placeholder': 'Digite a senha do Usuário',
-    },
-    {
-      'title': 'Role',
-      'model': 'role_id',
-      'type': 'select',
-      'placeholder': 'Select Role',
-      // 'options': ['teste', 'sysadmin', 'outros'], // when array of strings
-      'url_options': '/api/v1/roles-available',// wher options come from a url
-    },
-  ]
-};
 
 const editModal = ref(false);
 const itemToEdit = ref(null);
@@ -252,18 +221,6 @@ function handleUpdateItem(updatedItem) {
   entityStore.updateItem(updatedItem.id, updatedItem);
 }
 
-// MODULE INFO
-
-const title = ref('Cadastro de Usuários');
-const addButtonText = ref('Adicionar Novo Usuário');
-
-const columns = reactive([
-  { "title": "ID", "model": "id", "header_styles": "", "row_styles": "" },
-  { "title": "NOME", "model": "name", "header_styles": "", "row_styles": "" },
-  { "title": "EMAIL", "model": "email", "header_style": "", "row_styles": "" },
-  { "title": "PAPEL", "model": "role_name", "header_styles": "", "row_styles": "" },
-]);
-
 // INITIAL DATA 
 
 onMounted(async () => {
@@ -273,13 +230,13 @@ onMounted(async () => {
 
 // PAGINATION
 
-// const paginationInfo = computed(() => {
-//   if (entityStore.items && entityStore.items.data && entityStore.items.data.length > 0) {
-//     const from = (entityStore.items.meta.current_page - 1) * entityStore.items.meta.per_page + 1;
-//     const to = from + entityStore.items.data.length - 1;
-//     const total = entityStore.items.meta.total;
-//     return `Exibindo do ${from} ao ${to} de ${total} lançamentos`;
-//   }
-//   return 'No entries found';
-// });
+const paginationInfo = computed(() => {
+  if (entityStore.items && entityStore.items.data && entityStore.items.data.length > 0) {
+    const from = (entityStore.items.meta.current_page - 1) * entityStore.items.meta.per_page + 1;
+    const to = from + entityStore.items.data.length - 1;
+    const total = entityStore.items.meta.total;
+    return `Exibindo do ${from} ao ${to} de ${total} lançamentos`;
+  }
+  return 'No entries found';
+});
 </script>

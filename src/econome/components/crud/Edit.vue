@@ -7,15 +7,17 @@
       </ModalHeader>
       <ModalBody>
           <div v-for="(field, index) in info.fields" :key="index">
-              <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
-              <template v-if="field.type === 'select'">
-                <select :id="`modal-form-${index}`" class="form-control mb-4" v-model="form[field.model]">
-                    <option v-for="option in getOptions(field)" :key="option.id" :value="option.id">{{ option.name }}</option>
-                </select>
-              </template>
-              <template v-else>
-                  <input :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData" />
-              </template>
+              <div v-if="field.edit != false">
+                <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
+                <template v-if="field.type === 'select'">
+                  <select :id="`modal-form-${index}`" class="form-control mb-4" v-model="form[field.model]">
+                      <option v-for="option in getOptions(field)" :key="option.id" :value="option.id">{{ option.name }}</option>
+                  </select>
+                </template>
+                <template v-else>
+                    <input :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData" />
+                </template>
+              </div>
           </div>
       </ModalBody>
       <ModalFooter class="w-full absolute bottom-0">
