@@ -38,7 +38,7 @@
               <td>{{ user.id }}</td>
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>
-              <td>{{ user.role }}</td>
+              <td>{{ user.role_name }}</td>
               <td class="table-report__action">
   
                 <div class="flex justify-center items-center">
@@ -93,11 +93,8 @@ import Delete from "@/econome/components/crud/Delete.vue";
 import New from "@/econome/components/crud/Create.vue";
 import Edit from "@/econome/components/crud/Edit.vue";
 import View from "@/econome/components/crud/View.vue";
-import api from '@/utils/api.js'
 
 const userStore = useUserStore();
-
-const roleOptions = reactive([]);
 
 // SEARCH
 
@@ -134,7 +131,7 @@ const viewInfo = {
     },
     {
       'title': 'Papel',
-      'model': 'role',
+      'model': 'role_name',
       'type': 'text',
     },
     // Adicione mais campos conforme necessário
@@ -188,11 +185,12 @@ const createInfo = {
       'placeholder': 'Digite a senha do Usuário',
     },
     {
-      'title': 'Role',
-      'model': 'role',
+      'title': 'Papel',
+      'model': 'role_id',
       'type': 'select',
-      'placeholder': 'Select Role',
-      'options': ['Admin', 'Editor', 'Viewer'] // Add your role options here
+      'placeholder': 'Selecione um papel',
+      // 'options': ['teste', 'sysadmin', 'outros'], // when array of strings
+      'url_options': '/api/v1/roles-available',// wher options come from a url
     },
   ]
 };
@@ -232,10 +230,11 @@ const editInfo = {
     },
     {
       'title': 'Role',
-      'model': 'role',
+      'model': 'role_id',
       'type': 'select',
       'placeholder': 'Select Role',
-      'options': roleOptions.value // Add your role options here
+      // 'options': ['teste', 'sysadmin', 'outros'], // when array of strings
+      'url_options': '/api/v1/roles-available',// wher options come from a url
     },
   ]
 };
@@ -269,20 +268,7 @@ const columnsTitles = reactive([
 
 onMounted(async () => {
   await userStore.fetchUsers();
-  await fetchRoleOptions();
 });
-
-// GET AVAILABLE ROLES
-
-async function fetchRoleOptions() {
-  try {
-    const response = await api.get('/api/v1/roles-available');
-    roleOptions.value = response.data;
-    console.log(roleOptions.value);
-  } catch (error) {
-    console.error('Erro ao buscar as opções de função', error);
-  }
-}
 
 // PAGINATION
 
