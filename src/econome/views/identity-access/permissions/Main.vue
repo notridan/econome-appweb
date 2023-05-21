@@ -8,20 +8,26 @@ import { ref } from "vue";
 
 const crudConfig = ref({
     tableName: "permissions",
-    title: 'Cadastro de Permissoes',
-    createButtonText: 'Adicionar Nova Permissão',
+    title: 'Cadastro de Permissões',
+    createButtonText: 'Nova Permissão',
     createModalTitle: 'Adicionar Nova Permissão',
     editModalTitle: 'Editar Permissão',
     viewModalTitle: 'Detalhes da Permissão',
+    columns: 1,
     fields: [
         {
             'title': 'ID',
             'model': 'id',
             'type': 'text',
-            'edit': false,
-            'create': false,
             'header_styles': '',
-            'row_styles': ''
+            'row_styles': '',
+            'column': 1,
+            'crudPermissions': {
+                'edit': false,
+                'create': false,
+                'view': true,
+                'index': true
+            }
         },
         {
             'title': 'Nome',
@@ -30,8 +36,15 @@ const crudConfig = ref({
             'placeholder': 'Digite o nome do Usuário',
             'header_styles': '',
             'row_styles': '',
-            'required': true
-        }
+            'required': true,
+            'column': 1,
+            'crudPermissions': {
+                'edit': true,
+                'create': true,
+                'view': true,
+                'index': true
+            }
+        },
     ],
 });
 

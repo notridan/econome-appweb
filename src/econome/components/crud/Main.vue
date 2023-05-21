@@ -12,7 +12,7 @@
             <input
               type="text"
               class="form-control w-56 box pr-10"
-              placeholder="Search..."
+              placeholder="Buscar..."
               autocomplete="new-password"
               v-model="searchQuery"
               @input="searchItems"
