@@ -2,11 +2,11 @@
   <Modal :slideOver="true" :show="show" @hidden="closeModal">
     <ModalHeader class="p-5">
       <h2 class="font-medium text-base mr-auto">
-        {{ info.title }}
+        {{ title }}
       </h2>
     </ModalHeader>
     <ModalBody>
-      <div v-for="(field, index) in info.fields" :key="index">
+      <div v-for="(field, index) in fields" :key="index">
         <div v-if="field.edit != false">
           <label :for="`modal-form-${index}`" class="form-label">{{
             field.title
@@ -63,9 +63,13 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  info: {
+  fields: {
     type: Object,
     required: true,
+  },
+  title: {
+    type: String,
+    required: false,
   },
   entity: {
     type: Object,
@@ -91,7 +95,7 @@ const fieldOptions = reactive({});
 
 watchEffect(() => {
   if (props.entity) {
-    props.info.fields.forEach(async (field) => {
+    props.fields.forEach(async (field) => {
       form[field.model] = props.entity[field.model];
       if (field.url_options) {
         try {

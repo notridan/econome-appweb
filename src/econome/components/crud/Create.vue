@@ -2,11 +2,11 @@
   <Modal size="modal-lg" :slideOver="true" :show="show" @hidden="closeModal">
       <ModalHeader class="p-5">
           <h2 class="font-medium text-base mr-auto">
-              {{ info.title }}
+              {{ title }}
           </h2>
       </ModalHeader>
       <ModalBody>
-          <div v-for="(field, index) in info.fields" :key="index">
+          <div v-for="(field, index) in fields" :key="index">
               <div v-if="field.create != false">
                 <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
                 <input v-if="field.type !== 'select'" autocomplete="new-password" :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData"/>
@@ -39,9 +39,13 @@ show: {
   type: Boolean,
   required: true,
 },
-info: {
+fields: {
   type: Object,
   required: true
+},
+title: {
+  type: String,
+  required: false
 }
 });
 
@@ -62,7 +66,7 @@ const form = reactive({});
 const fieldOptions = reactive({});
 
 watchEffect(() => {
-  props.info.fields.forEach(async (field) => {
+  props.fields.forEach(async (field) => {
       form[field.model] = null; // make sure the initial value is null for select fields
       if (field.url_options) {
           try {

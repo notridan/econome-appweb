@@ -2,11 +2,11 @@
     <Modal :slideOver="true" :show="show" @hidden="closeModal">
         <ModalHeader class="p-5">
             <h2 class="font-medium text-base mr-auto">
-                {{ info.title }}
+                {{ title }}
             </h2>
         </ModalHeader>
         <ModalBody>
-            <div v-for="(field, index) in info.fields" :key="index">
+            <div v-for="(field, index) in fields" :key="index">
                 <div v-if="field.view != false">
                   <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
                   <input :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" v-model="entity[field.model]" readonly />
@@ -29,9 +29,13 @@
       type: Boolean,
       required: true,
     },
-    info: {
+    fields: {
       type: Object,
       required: true,
+    },
+    title: {
+      type: String,
+      required: false,
     },
     entity: {
       type: Object,
