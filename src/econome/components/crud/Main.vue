@@ -27,7 +27,7 @@
         <table class="table table-report -mt-2">
           <thead>
             <tr>
-              <th v-for="(column, index) in config.fields" :key="index" :class="column.header_styles">
+              <th v-for="(column, index) in config.fields" :key="index" :class="column.header_styles" v-show="column.crudPermissions && column.crudPermissions.index !== false">
                 {{ column.title }}
               </th>
               <th class="text-center whitespace-nowrap">Ações</th>
@@ -35,7 +35,7 @@
           </thead>
           <tbody v-if="entityStore.items && entityStore.items.data">
             <tr v-for="(entity, index) in entityStore.items.data" :key="index" class="intro-x">
-              <td v-for="column in config.fields" :key="column.model" :class="column.row_styles">
+              <td v-for="column in config.fields" :key="column.model" :class="column.row_styles" v-show="column.crudPermissions && column.crudPermissions.index !== false">
                 {{ entity[column.model] }}
               </td>
               <td class="table-report__action">
@@ -72,14 +72,14 @@
           @pagination-change-page="entityStore.fetchItems" />
     </div>
 
-    <New :title="config.createModalTitle" :fields="config.fields" :show="newModal" @closed="newModal = false" @save="handleSaveNewItem"></New>
-    <Edit  :title="config.editModalTitle" :fields="config.fields" v-if="itemToEdit" :show="editModal" :entity="itemToEdit" @closed="editModal = false" @update="handleUpdateItem"></Edit>
-    <View :title="config.viewModalTitle" :fields="config.fields" v-if="itemToView" :show="viewModal" :entity="itemToView" @closed="viewModal = false"></View>
+    <New :columns="config.columns" :title="config.createModalTitle" :fields="config.fields" :show="newModal" @closed="newModal = false" @save="handleSaveNewItem"></New>
+    <Edit  :columns="config.columns" :title="config.editModalTitle" :fields="config.fields" v-if="itemToEdit" :show="editModal" :entity="itemToEdit" @closed="editModal = false" @update="handleUpdateItem"></Edit>
+    <View :columns="config.columns" :title="config.viewModalTitle" :fields="config.fields" v-if="itemToView" :show="viewModal" :entity="itemToView" @closed="viewModal = false"></View>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, reactive, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { createGenericStore } from '@/stores/useGenericStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
 import Delete from "@/econome/components/crud/Delete.vue";

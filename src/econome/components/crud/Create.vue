@@ -6,20 +6,24 @@
           </h2>
       </ModalHeader>
       <ModalBody>
-          <div v-for="(field, index) in fields" :key="index">
-              <div v-if="field.create != false">
-                <label :for="`modal-form-${index}`" class="form-label">
-                  {{ field.title }}
-                  <span v-if="field.required">*</span>
-                </label>
-                <input v-if="field.type !== 'select'" autocomplete="new-password" :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData"/>
-                <select v-else-if="field.type === 'select'" :id="`modal-form-${index}`" class="form-control mb-4" v-model="form[field.model]" @keyup.enter="saveData">
-                  <option disabled value="null">{{ field.placeholder }}</option>
-                  <option v-for="(option, index) in getOptions(field)" :key="index" :value="option.id">
-                    {{ option.name }}
-                  </option>
-                </select>
+        <div :class="`grid grid-cols-${columns}`">
+            <div v-for="column in columns" :key="column">
+              <div v-for="field in getColumnFields(column)" :key="field.model">
+                <div v-if="field.crudPermissions.create != false" class="mr-4">
+                  <label :for="`modal-form-${field.model}`" class="form-label">
+                    {{ field.title }}
+                    <span v-if="field.required">*</span>
+                  </label>
+                  <input v-if="field.type !== 'select'" autocomplete="new-password" :id="`modal-form-${field.model}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData"/>
+                  <select v-else-if="field.type === 'select'" :id="`modal-form-${field.model}`" class="form-control mb-4" v-model="form[field.model]" @keyup.enter="saveData">
+                    <option disabled value="null">{{ field.placeholder }}</option>
+                    <option v-for="(option, index) in getOptions(field)" :key="index" :value="option.id">
+                      {{ option.name }}
+                    </option>
+                  </select>
+                </div>
               </div>
+            </div>
           </div>
       </ModalBody>
       <ModalFooter class="w-full absolute bottom-0">
@@ -41,6 +45,11 @@ const props = defineProps({
 show: {
   type: Boolean,
   required: true,
+},
+columns: {
+  type: Number,
+  required: false,
+  default: 1,
 },
 fields: {
   type: Object,
@@ -88,5 +97,9 @@ watchEffect(() => {
 
 const getOptions = (field) => {
   return fieldOptions[field.model];
+};
+
+const getColumnFields = (column) => {
+  return props.fields.filter((field, index) => index % props.columns === column - 1);
 };
 </script>

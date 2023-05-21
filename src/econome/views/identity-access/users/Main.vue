@@ -13,15 +13,21 @@ const crudConfig = ref({
     createModalTitle: 'Adicionar Novo Usuário',
     editModalTitle: 'Editar Usuário',
     viewModalTitle: 'Detalhes do Usuário',
+    columns: 2,
     fields: [
         {
             'title': 'ID',
             'model': 'id',
             'type': 'text',
-            'edit': false,
-            'create': false,
             'header_styles': '',
-            'row_styles': ''
+            'row_styles': '',
+            'column': 1,
+            'crudPermissions': {
+                'edit': false,
+                'create': false,
+                'view': true,
+                'index': true
+            }
         },
         {
             'title': 'Nome',
@@ -30,7 +36,14 @@ const crudConfig = ref({
             'placeholder': 'Digite o nome do Usuário',
             'header_styles': '',
             'row_styles': '',
-            'required': true
+            'required': true,
+            'column': 1,
+            'crudPermissions': {
+                'edit': true,
+                'create': true,
+                'view': true,
+                'index': true
+            }
         },
         {
             'title': 'Email',
@@ -39,7 +52,14 @@ const crudConfig = ref({
             'placeholder': 'Digite o email do Usuário',
             'header_styles': '',
             'row_styles': '',
-            'required': true
+            'required': true,
+            'column': 2,
+            'crudPermissions': {
+                'edit': true,
+                'create': true,
+                'view': true,
+                'index': true
+            }
         },
         {
             'title': 'Senha',
@@ -49,7 +69,14 @@ const crudConfig = ref({
             'view': false,
             'header_styles': '',
             'row_styles': '',
-            'required': true
+            'required': true,
+            'column': 2,
+            'crudPermissions': {
+                'edit': true,
+                'create': true,
+                'view': false,
+                'index': false
+            }
         },
         {
             'title': 'Papel',
@@ -58,18 +85,30 @@ const crudConfig = ref({
             'placeholder': 'Selecione um papel',
             // 'options': ['teste', 'sysadmin', 'outros'], // when array of strings
             'url_options': '/api/v1/roles-available',// wher options come from a url
-            'view': false,
             'header_styles': '',
             'row_styles': '',
-            'required': true
+            'required': true,
+            'column': 2,
+            'crudPermissions': {
+                'edit': true,
+                'create': true,
+                'view': false,
+                'index': false
+            }
         }, {
             'title': 'Papel',
             'model': 'role_name',
             'type': 'text',
-            'edit': false,
             'create': false,
             'header_styles': '',
             'row_styles': '',
+            'column': 2,
+            'crudPermissions': {
+                'edit': false,
+                'create': false,
+                'view': true,
+                'index': true
+            }
         }
         // Adicione mais campos conforme necessário
     ],

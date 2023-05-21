@@ -6,36 +6,40 @@
       </h2>
     </ModalHeader>
     <ModalBody>
-      <div v-for="(field, index) in fields" :key="index">
-        <div v-if="field.edit != false">
-          <label :for="`modal-form-${index}`" class="form-label">
-          {{ field.title }}
-          <span v-if="field.required">*</span></label>
-          <template v-if="field.type === 'select'">
-            <select
-              :id="`modal-form-${index}`"
-              class="form-control mb-4"
-              v-model="form[field.model]"
-            >
-              <option
-                v-for="option in getOptions(field)"
-                :key="option.id"
-                :value="option.id"
-              >
-                {{ option.name }}
-              </option>
-            </select>
-          </template>
-          <template v-else>
-            <input
-              :id="`modal-form-${index}`"
-              :type="field.type"
-              class="form-control mb-4"
-              :placeholder="field.placeholder"
-              v-model="form[field.model]"
-              @keyup.enter="saveData"
-            />
-          </template>
+      <div :class="`grid grid-cols-${columns}`">
+        <div v-for="column in columns" :key="column">
+          <div v-for="field in getColumnFields(column)" :key="field.model">
+            <div class="mr-4" v-if="field.crudPermissions.edit != false">
+              <label :for="`modal-form-${field.model}`" class="form-label">
+              {{ field.title }}
+              <span v-if="field.required">*</span></label>
+              <template v-if="field.type === 'select'">
+                <select
+                  :id="`modal-form-${field.model}`"
+                  class="form-control mb-4"
+                  v-model="form[field.model]"
+                >
+                  <option
+                    v-for="option in getOptions(field)"
+                    :key="option.id"
+                    :value="option.id"
+                  >
+                    {{ option.name }}
+                  </option>
+                </select>
+              </template>
+              <template v-else>
+                <input
+                  :id="`modal-form-${field.model}`"
+                  :type="field.type"
+                  class="form-control mb-4"
+                  :placeholder="field.placeholder"
+                  v-model="form[field.model]"
+                  @keyup.enter="saveData"
+                />
+              </template>
+            </div>
+          </div>
         </div>
       </div>
     </ModalBody>
@@ -63,8 +67,13 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  columns: {
+    type: Number,
+    required: false,
+    default: 1,
+  },
   fields: {
-    type: Object,
+    type: Array,
     required: true,
   },
   title: {
@@ -115,5 +124,9 @@ watchEffect(() => {
 
 const getOptions = (field) => {
   return fieldOptions[field.model];
+};
+
+const getColumnFields = (column) => {
+  return props.fields.filter((field, index) => index % props.columns === column - 1);
 };
 </script>
