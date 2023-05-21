@@ -8,9 +8,9 @@
     <ModalBody>
       <div v-for="(field, index) in fields" :key="index">
         <div v-if="field.edit != false">
-          <label :for="`modal-form-${index}`" class="form-label">{{
-            field.title
-          }}</label>
+          <label :for="`modal-form-${index}`" class="form-label">
+          {{ field.title }}
+          <span v-if="field.required">*</span></label>
           <template v-if="field.type === 'select'">
             <select
               :id="`modal-form-${index}`"

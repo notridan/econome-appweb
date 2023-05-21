@@ -8,7 +8,10 @@
       <ModalBody>
           <div v-for="(field, index) in fields" :key="index">
               <div v-if="field.create != false">
-                <label :for="`modal-form-${index}`" class="form-label">{{ field.title }}</label>
+                <label :for="`modal-form-${index}`" class="form-label">
+                  {{ field.title }}
+                  <span v-if="field.required">*</span>
+                </label>
                 <input v-if="field.type !== 'select'" autocomplete="new-password" :id="`modal-form-${index}`" :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]" @keyup.enter="saveData"/>
                 <select v-else-if="field.type === 'select'" :id="`modal-form-${index}`" class="form-control mb-4" v-model="form[field.model]" @keyup.enter="saveData">
                   <option disabled value="null">{{ field.placeholder }}</option>

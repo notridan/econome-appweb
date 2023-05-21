@@ -29,7 +29,8 @@ const crudConfig = ref({
             'type': 'text',
             'placeholder': 'Digite o nome do Usuário',
             'header_styles': '',
-            'row_styles': ''
+            'row_styles': '',
+            'required': true
         },
         {
             'title': 'Email',
@@ -37,7 +38,8 @@ const crudConfig = ref({
             'type': 'text',
             'placeholder': 'Digite o email do Usuário',
             'header_styles': '',
-            'row_styles': ''
+            'row_styles': '',
+            'required': true
         },
         {
             'title': 'Senha',
@@ -46,7 +48,8 @@ const crudConfig = ref({
             'placeholder': 'Digite a senha do Usuário',
             'view': false,
             'header_styles': '',
-            'row_styles': ''
+            'row_styles': '',
+            'required': true
         },
         {
             'title': 'Papel',
@@ -57,7 +60,8 @@ const crudConfig = ref({
             'url_options': '/api/v1/roles-available',// wher options come from a url
             'view': false,
             'header_styles': '',
-            'row_styles': ''
+            'row_styles': '',
+            'required': true
         }, {
             'title': 'Papel',
             'model': 'role_name',
@@ -65,7 +69,7 @@ const crudConfig = ref({
             'edit': false,
             'create': false,
             'header_styles': '',
-            'row_styles': ''
+            'row_styles': '',
         }
         // Adicione mais campos conforme necessário
     ],
