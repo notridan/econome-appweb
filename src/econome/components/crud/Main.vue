@@ -74,7 +74,7 @@
 
     <New :columns="config.columns" :title="config.createModalTitle" :fields="config.fields" :show="newModal" @closed="newModal = false" @save="handleSaveNewItem"></New>
     <Edit  :columns="config.columns" :title="config.editModalTitle" :fields="config.fields" v-if="itemToEdit" :show="editModal" :entity="itemToEdit" @closed="editModal = false" @update="handleUpdateItem"></Edit>
-    <View :columns="config.columns" :title="config.viewModalTitle" :fields="config.fields" v-if="itemToView" :show="viewModal" :entity="itemToView" @closed="viewModal = false"></View>
+    <View :childs="config.childs" :columns="config.columns" :title="config.viewModalTitle" :fields="config.fields" v-if="itemToView" :show="viewModal" :entity="itemToView" @closed="viewModal = false"></View>
   </div>
 </template>
 
