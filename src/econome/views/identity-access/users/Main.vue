@@ -9,8 +9,8 @@ import { ref } from "vue";
 const crudConfig = ref({
     tableName: "users",
     title: 'Cadastro de Usuários',
-    createButtonText: 'Adicionar Novo Usuário',
-    createModalTitle: 'Adicionar Novo Usuário',
+    createButtonText: 'Novo Usuário',
+    createModalTitle: 'Novo Usuário',
     editModalTitle: 'Editar Usuário',
     viewModalTitle: 'Detalhes do Usuário',
     columns: 2,

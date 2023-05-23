@@ -26,28 +26,39 @@
       </div>
       <div v-for="child in childs" :key="child">
         <div v-if="entity[child.model]['data'].length">
-          <div class="w-full border-t border-slate-200/60 dark:border-darkmode-400 border-dashed mt-4"></div>
-            <h5 class="text-lg font-medium leading-none mt-3 mb-3">{{child.title}}</h5>
-            <div class="overflow-x-auto">
-              <table class="table table-sm table-hover">
-                <thead class="table-light">
-                  <tr>
-                    <th v-for="(column, index) in child.fields" :key="index" class="whitespace-nowrap">
-                      {{ column.title }}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody v-if="entity[child.model]">
-                  <tr v-for="(entity, index) in entity[child.model]['data']" :key="index">
-                    <td v-for="column in child.fields" :key="column.model">
-                      {{ entity[column.model] }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div
+            class="w-full border-t border-slate-200/60 dark:border-darkmode-400 border-dashed mt-4"
+          ></div>
+          <h5 class="text-lg font-medium leading-none mt-3 mb-3">
+            {{ child.title }}
+          </h5>
+          <div class="overflow-x-auto">
+            <table class="table table-sm table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th
+                    v-for="(column, index) in child.fields"
+                    :key="index"
+                    class="whitespace-nowrap"
+                  >
+                    {{ column.title }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody v-if="entity[child.model]">
+                <tr
+                  v-for="(entity, index) in entity[child.model]['data']"
+                  :key="index"
+                >
+                  <td v-for="column in child.fields" :key="column.model">
+                    {{ entity[column.model] }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
+      </div>
     </ModalBody>
     <ModalFooter class="w-full absolute bottom-0">
       <button type="button" @click="closeModal" class="btn btn-primary w-20">
