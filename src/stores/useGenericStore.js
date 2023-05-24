@@ -20,10 +20,23 @@ export function createGenericStore(moduleName) {
     }),
 
     actions: {
-      async fetchItems(page = 1, query = '') {
+      async fetchItems(page = 1, query = '', role_id = '') {
         let loader = $loading.show();
         try {
-          const response = await api.get(`/api/v1/${moduleName}?page=${page}&search=${query}`);
+          let url = `/api/v1/${moduleName}`;
+          let params = {};
+
+          if (page) {
+            params.page = page;
+          }
+          if (query) {
+            params.search = query;
+          }
+          if (role_id) {
+            params.role_id = role_id;
+          }
+
+          const response = await api.get(url, { params });
           this.items = response.data;
         } catch (error) {
           console.error(`Error fetching ${moduleName}:`, error);

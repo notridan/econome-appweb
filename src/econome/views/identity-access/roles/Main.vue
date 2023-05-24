@@ -49,17 +49,24 @@ const crudConfig = ref({
     ],
     childs: [ 
         {
-            'title': 'Permissões do Usuário',
-            'model': 'permissions',
-            'fields': [
-                // {
-                //     'title': 'id',
-                //     'model': 'id'
-                // },
+            title: "Permissões",
+            tableName: "permissions",
+            fields: [
                 {
                     'title': 'Nome',
-                    'model': 'name'
-                }
+                    'model': 'name',
+                    'type': 'text',
+                    'placeholder': 'Digite o nome do Usuário',
+                    'header_styles': '',
+                    'row_styles': '',
+                    'crudPermissions': {
+                        // 'edit': true,
+                        // 'create': true,
+                        // 'view': true,
+                        'index': true
+                    }
+                },
+                
             ]
         }
     ]
