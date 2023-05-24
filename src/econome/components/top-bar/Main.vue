@@ -44,7 +44,7 @@
           <div class="max-w-[7rem] truncate font-medium">
             {{ authStore.userProfile?.name }}
           </div>
-          <div class="text-xs text-slate-400">{{ authStore.userProfile?.role }}</div>
+          <div class="text-xs text-slate-400">{{ authStore.userProfile?.role_name }}</div>
         </div>
       </DropdownToggle>
       <DropdownMenu class="w-56">

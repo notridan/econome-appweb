@@ -24,8 +24,8 @@
       </tbody>
       <tbody v-else>
         <tr>
-          <td :colspan="config.fields.length" class="text-center py-4 text-gray-500">
-            -
+          <td :colspan="config.fields.length" class="text-center py-4 text-gray-300">
+            - sem lançamentos -
           </td>
         </tr>
       </tbody>
