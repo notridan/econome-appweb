@@ -45,13 +45,14 @@ export const useSettingsStore = defineStore({
     async updateSettings(formData) {
       try {
         this.loading = true;
-        await api.post('/api/v1/settings', formData, {
+        const response = await api.post('/api/v1/settings', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
         const updatedSettings = Object.fromEntries(formData.entries());
         this.settings = updatedSettings;
+        toast.success(response.data.message)
       } catch (error) {
         this.error = error;
       } finally {

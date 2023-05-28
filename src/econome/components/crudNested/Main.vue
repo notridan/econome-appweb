@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { watch, ref, computed } from "vue";
+import { watch } from "vue";
 import { createGenericStore } from '@/stores/useGenericStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
 
@@ -55,26 +55,8 @@ const config = props.config;
 const useEntityStore = createGenericStore(config.tableName);
 const entityStore = useEntityStore();
 
-// INITIAL DATA 
-
-// onMounted(async () => {
-//   await entityStore.fetchItems(1, '', props.masterId);
-//   console.log(entityStore.items);
-// });
-
 watch(() => props.masterId, async (newMasterId) => {
   await entityStore.fetchItems(1, '', newMasterId);
 });
 
-// PAGINATION
-
-const paginationInfo = computed(() => {
-  if (entityStore.items && entityStore.items.data && entityStore.items.data.length > 0) {
-    const from = (entityStore.items.meta.current_page - 1) * entityStore.items.meta.per_page + 1;
-    const to = from + entityStore.items.data.length - 1;
-    const total = entityStore.items.meta.total;
-    return `Exibindo do ${from} ao ${to} de ${total} items`;
-  }
-  return 'No entries found';
-});
 </script>
