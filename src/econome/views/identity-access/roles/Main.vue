@@ -64,7 +64,8 @@ const crudConfig = ref({
                         // 'create': true,
                         // 'view': true,
                         'index': true
-                    }
+                    },
+                    'url_options': '/api/v1/available-permissions',
                 },
                 
             ]
