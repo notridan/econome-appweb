@@ -42,6 +42,12 @@
           </div>
         </div>
       </div>
+
+      <div>
+        <div v-for="(child, index) in childs" :key="index">
+          <UpdateNested :config="child" @update="nestedData => handleUpdate(nestedData, child)"></UpdateNested>    
+        </div>
+      </div>
     </ModalBody>
     <ModalFooter class="w-full absolute bottom-0">
       <button
@@ -60,6 +66,7 @@
 
 <script setup>
 import { ref, reactive, watchEffect } from "vue";
+import UpdateNested from '@/econome/components/crudNested/Edit.vue';
 import api from "@/utils/api.js";
 
 const props = defineProps({
@@ -71,6 +78,10 @@ const props = defineProps({
     type: Number,
     required: false,
     default: 1,
+  },
+  childs: {
+    type: Array,
+    required: false,
   },
   fields: {
     type: Array,
@@ -128,5 +139,9 @@ const getOptions = (field) => {
 
 const getColumnFields = (column) => {
   return props.fields.filter((field, index) => index % props.columns === column - 1);
+};
+
+const handleUpdate = (nestedData, child) => {
+  form[child.tableName] = nestedData;
 };
 </script>

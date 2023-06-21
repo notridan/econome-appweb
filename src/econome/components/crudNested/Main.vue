@@ -57,6 +57,6 @@ const entityStore = useEntityStore();
 
 watch(() => props.masterId, async (newMasterId) => {
   await entityStore.fetchItems(1, '', newMasterId);
-});
+}, { immediate: true });
 
 </script>
