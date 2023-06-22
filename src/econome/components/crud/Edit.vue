@@ -43,11 +43,11 @@
         </div>
       </div>
 
-      <div>
+      <!-- <div>
         <div v-for="(child, index) in childs" :key="index">
           <UpdateNested :config="child" @update="nestedData => handleUpdate(nestedData, child)"></UpdateNested>    
         </div>
-      </div>
+      </div> -->
     </ModalBody>
     <ModalFooter class="w-full absolute bottom-0">
       <button
