@@ -1,13 +1,13 @@
 <template>
-  <Modal :slideOver="true" :show="show" @hidden="closeModal">
+  <Modal size="modal-xl" :slideOver="true" :show="show" @hidden="closeModal">
     <ModalHeader class="p-5">
       <h2 class="font-medium text-base mr-auto">
         {{ title }}
       </h2>
     </ModalHeader>
     <ModalBody>
-      <div :class="`grid grid-cols-${columns}`">
-        <div v-for="column in columns" :key="column">
+      <div :class="`grid md:grid-cols-${maxColumn}`">
+        <div v-for="column in maxColumn" :key="column">
           <div v-for="field in getColumnFields(column)" :key="field.model">
             <div class="mr-4" v-if="field.crudPermissions.edit != false">
               <label :for="`modal-form-${field.model}`" class="form-label">
@@ -97,6 +97,8 @@ const props = defineProps({
   },
 });
 
+let maxColumn = Math.max(...props.fields.map(field => field.column));
+
 const emit = defineEmits(["update", "update:show", "closed"]);
 
 const closeModal = () => {
@@ -138,7 +140,7 @@ const getOptions = (field) => {
 };
 
 const getColumnFields = (column) => {
-  return props.fields.filter((field, index) => index % props.columns === column - 1);
+  return props.fields.filter(field => field.column === column);
 };
 
 const handleUpdate = (nestedData, child) => {

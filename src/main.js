@@ -15,12 +15,14 @@ app.use(pinia);
 app.use(router);
 
 
-// app.use(LoadingOverlayPlugin);
-
 const settingsStore = useSettingsStore();
-await settingsStore.fetchSettings();
 
-globalComponents(app);
-utils(app);
+settingsStore.fetchSettings().then(() => {
+    globalComponents(app);
+    utils(app);
 
-app.mount("#app");
+    app.mount("#app");
+});
+
+// await settingsStore.fetchSettings();
+

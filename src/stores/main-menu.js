@@ -41,6 +41,12 @@ export const useMainMenuStore = defineStore("mainMenu", {
           }
         ]
       },
+      {
+        icon: "HomeIcon",
+        pageName: "condominiums",
+        title: "Condomínios",
+      }
+
     ],
   }),
 });

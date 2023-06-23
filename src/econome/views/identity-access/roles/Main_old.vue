@@ -225,6 +225,6 @@ const paginationInfo = computed(() => {
     const total = roleStore.roles.meta.total;
     return `Exibindo do ${from} ao ${to} de ${total} lançamentos`;
   }
-  return 'No entries found';
+  return 'Sem dados encontrados';
 });
 </script>

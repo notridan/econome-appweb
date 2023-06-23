@@ -224,6 +224,6 @@ const paginationInfo = computed(() => {
     const total = moduleStore.modules.meta.total;
     return `Exibindo do ${from} ao ${to} de ${total} lançamentos`;
   }
-  return 'No entries found';
+  return 'Sem dados encontrados';
 });
 </script>

@@ -178,6 +178,6 @@ const paginationInfo = computed(() => {
     const total = entityStore.items.meta.total;
     return `Exibindo do ${from} ao ${to} de ${total} items`;
   }
-  return 'No entries found';
+  return 'Sem dados encontrados';
 });
 </script>

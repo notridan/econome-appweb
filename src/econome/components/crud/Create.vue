@@ -1,40 +1,106 @@
 <template>
-  <Modal size="modal-lg" :slideOver="true" :show="show" @hidden="closeModal">
+  <Modal size="modal-xl" :slideOver="true" :show="show" @hidden="closeModal">
     <ModalHeader class="p-5">
       <h2 class="font-medium text-base mr-auto">
         {{ title }}
       </h2>
     </ModalHeader>
     <ModalBody>
-      <div :class="`grid grid-cols-${columns}`">
+      <div :class="{ 
+          // needed to compilation time process
+          'grid md:grid-cols-1': columns === 1, 
+          'grid md:grid-cols-2': columns === 2,
+          'grid md:grid-cols-3': columns === 3,
+          'grid md:grid-cols-4': columns === 4,
+          'grid md:grid-cols-5': columns === 5
+        }">
         <div v-for="column in columns" :key="column">
           <div v-for="field in getColumnFields(column)" :key="field.model">
-            <div v-if="field.crudPermissions.create != false" class="mr-4">
+            <div v-if="field.crudPermissions.create != false" class="mr-4 mt-3">
               <label :for="`modal-form-${field.model}`" class="form-label">
                 {{ field.title }}
                 <span v-if="field.required">*</span>
               </label>
-              <input v-if="field.type !== 'select'" autocomplete="new-password" :id="`modal-form-${field.model}`"
-                :type="field.type" class="form-control mb-4" :placeholder="field.placeholder" v-model="form[field.model]"
-                @keyup.enter="saveData" />
-              <select v-else-if="field.type === 'select'" :id="`modal-form-${field.model}`" class="form-control mb-4"
-                v-model="form[field.model]" @keyup.enter="saveData">
+              <input
+                v-if="
+                  field.type === 'text' ||
+                  field.type === 'number' ||
+                  field.type === 'password' ||
+                  field.type === 'email' ||
+                  field.type === 'date'
+                "
+                autocomplete="new-password"
+                :id="`modal-form-${field.model}`"
+                :type="field.type"
+                class="form-control"
+                :placeholder="field.placeholder"
+                v-model="form[field.model]"
+              />
+
+              <select
+                v-else-if="field.type === 'select'"
+                :id="`modal-form-${field.model}`"
+                class="form-control mb-4"
+                v-model="form[field.model]"
+                @keyup.enter="saveData"
+              >
                 <option disabled value="null">{{ field.placeholder }}</option>
-                <option v-for="(option, index) in getOptions(field)" :key="index" :value="option.id">
+                <option
+                  v-for="(option, index) in getOptions(field)"
+                  :key="index"
+                  :value="option.id"
+                >
                   {{ option.name }}
                 </option>
               </select>
+
+              <div
+                v-else-if="field.type === 'checkbox'"
+                :id="`modal-form-${field.model}`"
+                class="form-switch mt-2"
+              >
+                <input
+                  :type="field.type"
+                  v-model="form[field.model]"
+                  class="form-check-input mb-2"
+                />
+              </div>
+
+              <input
+                v-else-if="field.type === 'radio'"
+                :id="`modal-form-${field.model}`"
+                :type="field.type"
+                class="form-check-input"
+                v-model="form[field.model]"
+              />
+
+              <textarea
+                v-else-if="field.type === 'textarea'"
+                :id="`modal-form-${field.model}`"
+                :type="field.type"
+                class="form-control h-25"
+                :placeholder="field.placeholder"
+                v-model="form[field.model]"
+              ></textarea>
             </div>
           </div>
         </div>
       </div>
 
       <div v-for="(child, index) in childs" :key="index">
-        <CreateNested :config="child" @update="nestedData => handleUpdate(nestedData, child)"></CreateNested>    
+        <CreateNested
+          :config="child"
+          @update="(nestedData) => handleUpdate(nestedData, child)"
+        ></CreateNested>
       </div>
+      
     </ModalBody>
     <ModalFooter class="w-full absolute bottom-0">
-      <button type="button" @click="closeModal" class="btn btn-outline-secondary w-20 mr-1">
+      <button
+        type="button"
+        @click="closeModal"
+        class="btn btn-outline-secondary w-20 mr-1"
+      >
         Cancelar
       </button>
       <button type="button" @click="saveData" class="btn btn-primary w-20">
@@ -45,9 +111,9 @@
 </template>
 
 <script setup>
-import { reactive, watchEffect } from 'vue';
-import CreateNested from '@/econome/components/crudNested/Create.vue';
-import api from '@/utils/api.js';
+import { reactive, watchEffect } from "vue";
+import CreateNested from "@/econome/components/crudNested/Create.vue";
+import api from "@/utils/api.js";
 
 const props = defineProps({
   show: {
@@ -61,7 +127,7 @@ const props = defineProps({
   },
   fields: {
     type: Object,
-    required: true
+    required: true,
   },
   childs: {
     type: Array,
@@ -69,9 +135,11 @@ const props = defineProps({
   },
   title: {
     type: String,
-    required: false
-  }
+    required: false,
+  },
 });
+
+const classBuilder = () => `grid md:grid-cols-${props.columns}`;
 
 const emit = defineEmits(["save", "update:show", "closed"]);
 
@@ -81,8 +149,14 @@ const closeModal = () => {
 };
 
 const saveData = () => {
-  emit("save", form);
-  Object.keys(form).forEach(key => form[key] = null);
+  const filledFields = Object.fromEntries(
+    Object.entries(form).filter(([, value]) => value != null)
+  );
+
+  emit("save", filledFields);
+
+  Object.keys(filledFields).forEach((key) => (filledFields[key] = null));
+
   closeModal();
 };
 
@@ -112,7 +186,7 @@ const getOptions = (field) => {
 };
 
 const getColumnFields = (column) => {
-  return props.fields.filter((field, index) => index % props.columns === column - 1);
+  return props.fields.filter((field) => field.column === column);
 };
 
 const handleUpdate = (nestedData, child) => {
