@@ -79,7 +79,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, provide } from "vue";
 import { createGenericStore } from '@/stores/useGenericStore';
 import PaginationComponent from '@/econome/components/pagination/Main.vue';
 import Delete from "@/econome/components/crud/Delete.vue";
@@ -97,6 +97,7 @@ const config = props.config;
 
 const useEntityStore = createGenericStore(config.tableName);
 const entityStore = useEntityStore();
+provide('validationErrors', entityStore);
 
 // SEARCH
 

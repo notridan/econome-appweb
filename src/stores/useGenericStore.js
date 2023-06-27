@@ -17,6 +17,8 @@ export function createGenericStore(moduleName) {
     state: () => ({
       items: [],
       item: null,
+      validationErrors: {
+      },
     }),
 
     actions: {
@@ -65,9 +67,13 @@ export function createGenericStore(moduleName) {
           const response = await api.post(`/api/v1/${moduleName}`, itemData);
           toast.success(response.data.message);
           await this.fetchItems();
+          this.validationErrors = null;
         } catch (error) {
           console.error(`Error creating ${moduleName}:`, error);
           toast.error(error.response.data.message);
+          if (error.response.data.errors) {
+            this.validationErrors = error.response.data.errors;  // Armazene os erros de validação no estado
+          }
         } finally {
           loader.hide();
         }
@@ -79,9 +85,13 @@ export function createGenericStore(moduleName) {
           const response = await api.put(`/api/v1/${moduleName}/${id}`, itemData);
           toast.success(response.data.message);
           await this.fetchItems();
+          this.validationErrors = {};
         } catch (error) {
-          console.error(`Error updating ${moduleName}:`, error);
+          // console.error(`Error updating ${moduleName}:`, error);
           toast.error(error.response.data.message);
+          if (error.response.data.errors) {
+            this.validationErrors = error.response.data.errors;  // Armazene os erros de validação no estado
+          }
         } finally {
           loader.hide();
         }

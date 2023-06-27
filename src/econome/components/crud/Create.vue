@@ -17,9 +17,10 @@
         <div v-for="column in columns" :key="column">
           <div v-for="field in getColumnFields(column)" :key="field.model">
             <div v-if="field.crudPermissions.create != false" class="mr-4 mt-3">
-              <label :for="`modal-form-${field.model}`" class="form-label">
+              <label :for="`modal-form-${field.model}`" class="form-label w-full flex flex-col sm:flex-row">
                 {{ field.title }}
                 <span v-if="field.required">*</span>
+                <span v-if="validationErrors.validationErrors[field.model]" class="sm:ml-auto mt-1 sm:mt-0 text-xs text-red-800">{{ validationErrors.validationErrors[field.model][0] }}</span>
               </label>
               <input
                 v-if="
@@ -33,6 +34,7 @@
                 :id="`modal-form-${field.model}`"
                 :type="field.type"
                 class="form-control"
+                :class="{ 'border-danger':validationErrors.validationErrors[field.model]} "
                 :placeholder="field.placeholder"
                 v-model="form[field.model]"
               />
@@ -111,7 +113,7 @@
 </template>
 
 <script setup>
-import { reactive, watchEffect } from "vue";
+import { inject, reactive, watchEffect } from "vue";
 import CreateNested from "@/econome/components/crudNested/Create.vue";
 import api from "@/utils/api.js";
 
@@ -139,7 +141,7 @@ const props = defineProps({
   },
 });
 
-const classBuilder = () => `grid md:grid-cols-${props.columns}`;
+const validationErrors = inject('validationErrors');
 
 const emit = defineEmits(["save", "update:show", "closed"]);
 
@@ -152,12 +154,12 @@ const saveData = () => {
   const filledFields = Object.fromEntries(
     Object.entries(form).filter(([, value]) => value != null)
   );
-
+  
   emit("save", filledFields);
+  console.log(validationErrors)
+  // Object.keys(filledFields).forEach((key) => (filledFields[key] = null));
 
-  Object.keys(filledFields).forEach((key) => (filledFields[key] = null));
-
-  closeModal();
+  // closeModal();
 };
 
 const form = reactive({});
