@@ -53,6 +53,8 @@ const crudConfig = ref({
             'header_styles': '',
             'row_styles': '',
             'column': 2,
+            'mask': '##.###.###/####-##',
+            'clearMaskRegex': '\\D',
             'crudPermissions': {
                 'edit': true,
                 'create': true,

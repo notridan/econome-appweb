@@ -23,6 +23,8 @@
                 <span v-if="validationErrors.validationErrors[field.model]" class="sm:ml-auto mt-1 sm:mt-0 text-xs text-red-800">{{ validationErrors.validationErrors[field.model][0] }}</span>
               </label>
               <input
+                v-maska
+                :data-maska="field.mask ?? ''"
                 v-if="
                   field.type === 'text' ||
                   field.type === 'number' ||
@@ -116,6 +118,7 @@
 import { inject, reactive, watchEffect } from "vue";
 import CreateNested from "@/econome/components/crudNested/Create.vue";
 import api from "@/utils/api.js";
+import { vMaska } from "maska"
 
 const props = defineProps({
   show: {
@@ -152,7 +155,15 @@ const closeModal = () => {
 
 const saveData = () => {
   const filledFields = Object.fromEntries(
-    Object.entries(form).filter(([, value]) => value != null)
+    Object.entries(form).filter(([, value]) => value != null).map(([key, value]) => {
+      const field = props.fields.find(i => i.model == key)
+
+      if (field.clearMaskRegex != undefined) {
+        const regex = new RegExp(field.clearMaskRegex, "g")
+        console.log(field.mask)
+        return [key, value.replace(regex, "")]
+      }  
+    })
   );
   
   emit("save", filledFields);
