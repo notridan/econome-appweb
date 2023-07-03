@@ -6,21 +6,33 @@
       </h2>
     </ModalHeader>
     <ModalBody>
-      <div :class="{ 
+      <div
+        :class="{
           // needed to compilation time process
-          'grid md:grid-cols-1': columns === 1, 
+          'grid md:grid-cols-1': columns === 1,
           'grid md:grid-cols-2': columns === 2,
           'grid md:grid-cols-3': columns === 3,
           'grid md:grid-cols-4': columns === 4,
-          'grid md:grid-cols-5': columns === 5
-        }">
+          'grid md:grid-cols-5': columns === 5,
+        }"
+      >
         <div v-for="column in columns" :key="column">
           <div v-for="field in getColumnFields(column)" :key="field.model">
             <div v-if="field.crudPermissions.create != false" class="mr-4 mt-3">
-              <label :for="`modal-form-${field.model}`" class="form-label w-full flex flex-col sm:flex-row">
+              <label
+                :for="`modal-form-${field.model}`"
+                class="form-label w-full flex flex-col sm:flex-row"
+              >
                 {{ field.title }}
                 <span v-if="field.required">*</span>
-                <span v-if="validationErrors.validationErrors != undefined && validationErrors.validationErrors[field.model]" class="sm:ml-auto mt-1 sm:mt-0 text-xs text-red-800">{{ validationErrors.validationErrors[field.model][0] }}</span>
+                <span
+                  v-if="
+                    entityStore.validationErrors != undefined &&
+                    entityStore.validationErrors[field.model]
+                  "
+                  class="sm:ml-auto mt-1 sm:mt-0 text-xs text-red-800"
+                  >{{ entityStore.validationErrors[field.model][0] }}</span
+                >
               </label>
               <input
                 v-maska
@@ -37,7 +49,11 @@
                 :id="`modal-form-${field.model}`"
                 :type="field.type"
                 class="form-control"
-                :class="{ 'border-danger':validationErrors.validationErrors != undefined && validationErrors.validationErrors[field.model]} "
+                :class="{
+                  'border-danger':
+                    entityStore.validationErrors != undefined &&
+                    entityStore.validationErrors[field.model],
+                }"
                 :placeholder="field.placeholder"
                 v-model="form[field.model]"
               />
@@ -47,7 +63,6 @@
                 :id="`modal-form-${field.model}`"
                 class="form-control mb-4"
                 v-model="form[field.model]"
-                @keyup.enter="saveData"
               >
                 <option disabled value="null">{{ field.placeholder }}</option>
                 <option
@@ -98,7 +113,6 @@
           @update="(nestedData) => handleUpdate(nestedData, child)"
         ></CreateNested>
       </div>
-      
     </ModalBody>
     <ModalFooter class="w-full absolute bottom-0">
       <button
@@ -108,7 +122,11 @@
       >
         Cancelar
       </button>
-      <button type="button" @click="saveData" class="btn btn-primary w-20">
+      <button
+        type="button"
+        @click="handleSaveNewItem()"
+        class="btn btn-primary w-20"
+      >
         Salvar
       </button>
     </ModalFooter>
@@ -117,9 +135,10 @@
 
 <script setup>
 import { inject, reactive, watchEffect } from "vue";
+import { createGenericStore } from "@/stores/useGenericStore";
 import CreateNested from "@/econome/components/crudNested/Create.vue";
 import api from "@/utils/api.js";
-import { vMaska } from "maska"
+import { vMaska } from "maska";
 
 const props = defineProps({
   show: {
@@ -145,7 +164,7 @@ const props = defineProps({
   },
 });
 
-const validationErrors = inject('validationErrors');
+const config = inject("config");
 
 const emit = defineEmits(["save", "update:show", "closed"]);
 
@@ -154,27 +173,36 @@ const closeModal = () => {
   emit("closed");
 };
 
-const saveData = () => {
-  const filledFields = Object.fromEntries(
-    Object.entries(form).filter(([, value]) => value != null).map(([key, value]) => {
-      const field = props.fields.find(i => i.model == key);
-
-      if (field && field.clearMaskRegex != undefined) {
-        const regex = new RegExp(field.clearMaskRegex, "g");
-        return [key, value.replace(regex, "")];
-      } else {
-        // Garante que um valor seja sempre retornado
-        return [key, value];
-      }
-    })
-  );
-  
-  emit("save", filledFields);
-  console.log(validationErrors)
-};
+const useEntityStore = createGenericStore(config.tableName);
+const entityStore = useEntityStore();
 
 const form = reactive({});
 const fieldOptions = reactive({});
+
+async function handleSaveNewItem() {
+  const filledFields = Object.fromEntries(
+    Object.entries(form)
+      .filter(([, value]) => value != null)
+      .map(([key, value]) => {
+        const field = props.fields.find((i) => i.model == key);
+
+        if (field && field.clearMaskRegex != undefined) {
+          const regex = new RegExp(field.clearMaskRegex, "g");
+          return [key, value.replace(regex, "")];
+        } else {
+          // Garante que um valor seja sempre retornado
+          return [key, value];
+        }
+      })
+  );
+
+  await entityStore.createItem(filledFields);
+
+  if (!entityStore.validationErrors) {
+    Object.keys(form).forEach((key) => (form[key] = null));
+    closeModal();
+  }
+}
 
 watchEffect(() => {
   props.fields.forEach(async (field) => {

@@ -72,7 +72,7 @@
           @pagination-change-page="entityStore.fetchItems" />
     </div>
 
-    <New :childs="config.childs" :columns="config.columns" :title="config.createModalTitle" :fields="config.fields" :show="newModal" @closed="newModal = false" @save="handleSaveNewItem"></New>
+    <New :childs="config.childs" :columns="config.columns" :title="config.createModalTitle" :fields="config.fields" :show="newModal" @closed="newModal = false"></New>
     <Edit :childs="config.childs" :columns="config.columns" :title="config.editModalTitle" :fields="config.fields" v-if="itemToEdit" :show="editModal" :entity="itemToEdit" @closed="editModal = false" @update="handleUpdateItem"></Edit>
     <View :childs="config.childs" :columns="config.columns" :title="config.viewModalTitle" :fields="config.fields" v-if="itemToView" :show="viewModal" :entity="itemToView" @closed="viewModal = false"></View>
   </div>
@@ -97,7 +97,7 @@ const config = props.config;
 
 const useEntityStore = createGenericStore(config.tableName);
 const entityStore = useEntityStore();
-provide('validationErrors', entityStore);
+provide('config', config);
 
 // SEARCH
 
@@ -145,9 +145,9 @@ function showNewModal(){
   newModal.value = true;
 }
 
-function handleSaveNewItem(newEntity){
-  entityStore.createItem(newEntity);
-}
+// function handleSaveNewItem(newEntity){
+//   entityStore.createItem(newEntity);
+// }
 
 // UPDATE
 
