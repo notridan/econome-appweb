@@ -20,13 +20,14 @@
               <label :for="`modal-form-${field.model}`" class="form-label w-full flex flex-col sm:flex-row">
                 {{ field.title }}
                 <span v-if="field.required">*</span>
-                <span v-if="validationErrors.validationErrors[field.model]" class="sm:ml-auto mt-1 sm:mt-0 text-xs text-red-800">{{ validationErrors.validationErrors[field.model][0] }}</span>
+                <span v-if="validationErrors.validationErrors != undefined && validationErrors.validationErrors[field.model]" class="sm:ml-auto mt-1 sm:mt-0 text-xs text-red-800">{{ validationErrors.validationErrors[field.model][0] }}</span>
               </label>
               <input
                 v-maska
                 :data-maska="field.mask ?? ''"
                 v-if="
                   field.type === 'text' ||
+                  field.type === 'tel' ||
                   field.type === 'number' ||
                   field.type === 'password' ||
                   field.type === 'email' ||
@@ -36,7 +37,7 @@
                 :id="`modal-form-${field.model}`"
                 :type="field.type"
                 class="form-control"
-                :class="{ 'border-danger':validationErrors.validationErrors[field.model]} "
+                :class="{ 'border-danger':validationErrors.validationErrors != undefined && validationErrors.validationErrors[field.model]} "
                 :placeholder="field.placeholder"
                 v-model="form[field.model]"
               />
@@ -156,21 +157,20 @@ const closeModal = () => {
 const saveData = () => {
   const filledFields = Object.fromEntries(
     Object.entries(form).filter(([, value]) => value != null).map(([key, value]) => {
-      const field = props.fields.find(i => i.model == key)
+      const field = props.fields.find(i => i.model == key);
 
-      if (field.clearMaskRegex != undefined) {
-        const regex = new RegExp(field.clearMaskRegex, "g")
-        console.log(field.mask)
-        return [key, value.replace(regex, "")]
-      }  
+      if (field && field.clearMaskRegex != undefined) {
+        const regex = new RegExp(field.clearMaskRegex, "g");
+        return [key, value.replace(regex, "")];
+      } else {
+        // Garante que um valor seja sempre retornado
+        return [key, value];
+      }
     })
   );
   
   emit("save", filledFields);
   console.log(validationErrors)
-  // Object.keys(filledFields).forEach((key) => (filledFields[key] = null));
-
-  // closeModal();
 };
 
 const form = reactive({});

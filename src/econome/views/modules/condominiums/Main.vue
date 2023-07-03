@@ -70,6 +70,8 @@ const crudConfig = ref({
             'header_styles': '',
             'row_styles': '',
             'column': 2,
+            'mask': "['(##) #####-####', '(##) ####-####']",
+            'clearMaskRegex': '\\D',
             'crudPermissions': {
                 'edit': true,
                 'create': true,
@@ -85,6 +87,8 @@ const crudConfig = ref({
             'header_styles': '',
             'row_styles': '',
             'column': 1,
+            'mask': "#####-###",
+            'clearMaskRegex': '\\D',
             'crudPermissions': {
                 'edit': true,
                 'create': true,
@@ -110,7 +114,7 @@ const crudConfig = ref({
         {
             'title': 'Número',
             'model': 'number',
-            'type': 'text',
+            'type': 'tel',
             'placeholder': 'Digite o número do Condomínio',
             'header_styles': '',
             'row_styles': '',
