@@ -36,7 +36,22 @@
           <tbody v-if="entityStore.items && entityStore.items.data">
             <tr v-for="(entity, index) in entityStore.items.data" :key="index" class="intro-x">
               <td v-for="column in config.fields" :key="column.model" :class="column.row_styles" v-show="column.crudPermissions && column.crudPermissions.index !== false">
-                {{ entity[column.model] }}
+               
+
+               <div v-if="column.type == 'checkbox'" class="form-switch mt-2">
+                <input
+                    disabled
+                    :type="column.type"
+                    :checked="toBoolean(entity[column.model])"
+                    @change="entity[column.model] = fromBoolean($event.target.checked)"
+                    class="form-check-input mb-2"
+                />
+                </div>
+
+                <div v-else>
+                  
+                  <span>{{ getMask(entity[column.model], column.mask ?? '') }}</span>
+                </div>
               </td>
               <td class="table-report__action">
   
@@ -86,6 +101,19 @@ import Delete from "@/econome/components/crud/Delete.vue";
 import New from "@/econome/components/crud/Create.vue";
 import Edit from "@/econome/components/crud/Edit.vue";
 import View from "@/econome/components/crud/View.vue";
+import { Mask } from "maska";
+
+function getMask(value, mask){
+  
+  if(mask != '' && value != undefined){
+    const data = new Mask({ mask: mask })
+    return data.masked(value)
+  }else{
+    return value;
+  }
+  
+  
+}
 
 // MODULE INFO
 
@@ -102,6 +130,14 @@ provide('config', config);
 // SEARCH
 
 const searchQuery = ref('');
+
+function toBoolean(value) {
+    return !!value;
+}
+
+function fromBoolean(value) {
+    return value ? 1 : 0;
+}
 
 function searchItems() {
   entityStore.fetchItems(1, searchQuery.value);

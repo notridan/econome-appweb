@@ -36,7 +36,7 @@
               </label>
               <input
                 v-maska
-                :data-maska="field.mask ?? ''"
+                :data-maska="typeof field.mask != 'string' ? JSON.stringify(field.mask) : field.mask ?? ''"
                 v-if="
                   field.type === 'text' ||
                   field.type === 'tel' ||

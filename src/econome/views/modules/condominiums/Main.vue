@@ -26,7 +26,7 @@ const crudConfig = ref({
                 'edit': false,
                 'create': false,
                 'view': true,
-                'index': true
+                'index': false
             }
         },
         {
@@ -52,6 +52,7 @@ const crudConfig = ref({
             'placeholder': 'Digite o CNPJ do Condomínio',
             'header_styles': '',
             'row_styles': '',
+            'required': true,
             'column': 2,
             'mask': '##.###.###/####-##',
             'clearMaskRegex': '\\D',
@@ -59,7 +60,7 @@ const crudConfig = ref({
                 'edit': true,
                 'create': true,
                 'view': true,
-                'index': false
+                'index': true
             }
         },
         {
@@ -70,13 +71,13 @@ const crudConfig = ref({
             'header_styles': '',
             'row_styles': '',
             'column': 2,
-            'mask': "['(##) #####-####', '(##) ####-####']",
+            'mask': ['(##) #####-####', '(##) ####-####'],
             'clearMaskRegex': '\\D',
             'crudPermissions': {
                 'edit': true,
                 'create': true,
                 'view': true,
-                'index': false
+                'index': true
             }
         },
         {
@@ -153,7 +154,7 @@ const crudConfig = ref({
                 'edit': true,
                 'create': true,
                 'view': true,
-                'index': false
+                'index': true
             }
         },
         {
@@ -211,7 +212,7 @@ const crudConfig = ref({
                 'edit': true,
                 'create': true,
                 'view': true,
-                'index': true
+                'index': false
             }
         },
         {
@@ -226,7 +227,7 @@ const crudConfig = ref({
                 'edit': true,
                 'create': true,
                 'view': true,
-                'index': true
+                'index': false
             }
         },
         {
@@ -241,7 +242,7 @@ const crudConfig = ref({
                 'edit': true,
                 'create': true,
                 'view': true,
-                'index': true
+                'index': false
             }
         }
     ]
