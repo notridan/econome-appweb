@@ -6,7 +6,15 @@
       </h2>
     </ModalHeader>
     <ModalBody>
-      <div :class="`grid grid-cols-${columns}`">
+      <div 
+        :class="{
+          // needed to compilation time process
+          'grid md:grid-cols-1': columns === 1,
+          'grid md:grid-cols-2': columns === 2,
+          'grid md:grid-cols-3': columns === 3,
+          'grid md:grid-cols-4': columns === 4,
+          'grid md:grid-cols-5': columns === 5,
+        }">
         <div v-for="column in columns" :key="column">
           <div v-for="field in getColumnFields(column)" :key="field.model">
             <div class="mr-4" v-if="field.crudPermissions.view != false">
@@ -14,12 +22,41 @@
                 field.title
               }}</label>
               <input
+                v-if="
+                  field.type === 'text' ||
+                  field.type === 'tel' ||
+                  field.type === 'number' ||
+                  field.type === 'password' ||
+                  field.type === 'email' ||
+                  field.type === 'date'
+                "
                 :id="`modal-form-${field.model}`"
                 :type="field.type"
                 class="form-control mb-4"
                 v-model="entity[field.model]"
                 readonly
               />
+              <div
+                v-else-if="field.type === 'checkbox'"
+                :id="`modal-form-${field.model}`"
+                class="form-switch mt-2"
+              >
+                <input
+                  disabled
+                  :type="field.type"
+                  :checked="toBoolean(entity[field.model])"
+                  class="form-check-input mb-2"
+                />
+              </div>
+              <textarea
+                disabled
+                v-else-if="field.type === 'textarea'"
+                :id="`modal-form-${field.model}`"
+                :type="field.type"
+                class="form-control h-25"
+                :placeholder="field.placeholder"
+                v-model="entity[field.model]"
+              ></textarea>
             </div>
           </div>
         </div>
@@ -29,7 +66,7 @@
         <CrudNested :config="child" :masterId="entity['id']"></CrudNested>
       </div>
     </ModalBody>
-    <ModalFooter class="w-full absolute bottom-0">
+    <ModalFooter class="w-full bottom-0">
       <button type="button" @click="closeModal" class="btn btn-primary w-20">
         Fechar
       </button>
@@ -68,6 +105,14 @@ const props = defineProps({
     required: true,
   },
 });
+
+function toBoolean(value) {
+    return !!value;
+}
+
+function fromBoolean(value) {
+    return value ? 1 : 0;
+}
 
 const emit = defineEmits(["update:show", "closed"]);
 

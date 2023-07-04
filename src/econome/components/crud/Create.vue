@@ -114,7 +114,7 @@
         ></CreateNested>
       </div>
     </ModalBody>
-    <ModalFooter class="w-full absolute bottom-0">
+    <ModalFooter class="w-full bottom-0">
       <button
         type="button"
         @click="closeModal"
