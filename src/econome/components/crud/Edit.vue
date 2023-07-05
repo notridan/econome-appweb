@@ -5,7 +5,7 @@
         {{ title }}
       </h2>
     </ModalHeader>
-    <ModalBody>
+    <ModalBody class="overflow-auto max-h-[calc(100vh-8rem)]">
       <div
         :class="{
           // needed to compilation time process
@@ -21,7 +21,7 @@
             <div class="mr-4 mt-3" v-if="field.crudPermissions.edit != false">
               <label :for="`modal-form-${field.model}`" class="form-label w-full flex flex-col sm:flex-row">
                 {{ field.title }}
-                <span v-if="field.required">*</span>
+                <template v-if="field.required">*</template>
                 <span
                   v-if="
                     entityStore.validationErrors != undefined &&
@@ -136,7 +136,7 @@
         </div>
       </div> -->
     </ModalBody>
-    <ModalFooter class="w-full absolute bottom-0">
+    <ModalFooter class="w-full absolute bottom-0 left-0 px-5 py-3 bg-white">
       <button
         type="button"
         @click="closeModal"
@@ -216,7 +216,24 @@ const closeModal = () => {
 // };
 
 function handleUpdateItem() {
-  entityStore.updateItem(props.id, form);
+  const filledFields = Object.fromEntries(
+    Object.entries(form)
+      .filter(([, value]) => value !== "") // Adicione esta linha para filtrar strings vazias
+      .filter(([, value]) => value != null)
+      .map(([key, value]) => {
+        const field = props.fields.find((i) => i.model == key);
+
+        if (field && field.clearMaskRegex != undefined) {
+          const regex = new RegExp(field.clearMaskRegex, "g");
+          return [key, value.replace(regex, "")];
+        } else {
+          // Garante que um valor seja sempre retornado
+          return [key, value];
+        }
+      })
+  );
+
+  entityStore.updateItem(props.id, filledFields);
   closeModal();
 }
 

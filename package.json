@@ -55,6 +55,7 @@
     "postcss-advanced-variables": "^3.0.1",
     "postcss-import": "^14.0.2",
     "tailwindcss": "^3.0.24",
-    "vite": "^2.7.2"
+    "vite": "^2.7.2",
+    "volar-service-vetur": "latest"
   }
 }

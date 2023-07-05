@@ -5,7 +5,7 @@
         {{ title }}
       </h2>
     </ModalHeader>
-    <ModalBody>
+    <ModalBody class="overflow-auto max-h-[calc(100vh-8rem)]">
       <div
         :class="{
           // needed to compilation time process
@@ -24,7 +24,7 @@
                 class="form-label w-full flex flex-col sm:flex-row"
               >
                 {{ field.title }}
-                <span v-if="field.required">*</span>
+                <template v-if="field.required">*</template>
                 <span
                   v-if="
                     entityStore.validationErrors != undefined &&
@@ -114,7 +114,7 @@
         ></CreateNested>
       </div>
     </ModalBody>
-    <ModalFooter class="w-full bottom-0">
+    <ModalFooter class="w-full absolute bottom-0 left-0 px-5 py-3 bg-white">
       <button
         type="button"
         @click="closeModal"
