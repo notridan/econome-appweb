@@ -9,12 +9,18 @@ import "./assets/css/app.css";
 import { useSettingsStore } from '@/stores/useSettingsStore';
 import * as Maska from 'maska';
 
-
 const pinia = createPinia();
 const app = createApp(App);
 app.use(pinia);
 app.use(router);
-app.use(Maska);
+
+const MaskaPlugin = {
+  install(app) {
+    app.directive('maska', Maska);
+  }
+}
+
+app.use(MaskaPlugin);
 
 const settingsStore = useSettingsStore();
 
@@ -25,5 +31,4 @@ settingsStore.fetchSettings().then(() => {
     app.mount("#app");
 });
 
-// await settingsStore.fetchSettings();
 

@@ -88,7 +88,7 @@
     </div>
 
     <New :childs="config.childs" :columns="config.columns" :title="config.createModalTitle" :fields="config.fields" :show="newModal" @closed="newModal = false"></New>
-    <Edit :childs="config.childs" :columns="config.columns" :title="config.editModalTitle" :fields="config.fields" v-if="itemToEdit" :show="editModal" :entity="itemToEdit" @closed="editModal = false" @update="handleUpdateItem"></Edit>
+    <Edit :childs="config.childs" :columns="config.columns" :title="config.editModalTitle" :fields="config.fields" v-if="itemToEdit" :show="editModal" :id="itemToEdit" @closed="editModal = false"></Edit>
     <View :childs="config.childs" :columns="config.columns" :title="config.viewModalTitle" :fields="config.fields" v-if="itemToView" :show="viewModal" :entity="itemToView" @closed="viewModal = false"></View>
   </div>
 </template>
@@ -191,14 +191,14 @@ const editModal = ref(false);
 const itemToEdit = ref(null);
 
 async function showEditModal(item) {
-  await entityStore.fetchItem(item.id);
-  itemToEdit.value = entityStore.item.data;
+  // await entityStore.fetchItem(item.id);
+  itemToEdit.value = item.id;
   editModal.value = true;
 }
 
-function handleUpdateItem(updatedItem) {
-  entityStore.updateItem(updatedItem.id, updatedItem);
-}
+// function handleUpdateItem(updatedItem) {
+//   entityStore.updateItem(updatedItem.id, updatedItem);
+// }
 
 // INITIAL DATA 
 

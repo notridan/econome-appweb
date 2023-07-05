@@ -1,5 +1,5 @@
 <template>
-  <Modal size="modal-lg" :slideOver="true" :show="show" @hidden="closeModal">
+  <Modal size="modal-xl" :slideOver="true" :show="show" @hidden="closeModal">
     <ModalHeader class="p-5">
       <h2 class="font-medium text-base mr-auto">
         {{ title }}
@@ -128,8 +128,6 @@ watchEffect(() => {
 });
 
 const getColumnFields = (column) => {
-  return props.fields.filter(
-    (field, index) => index % props.columns === column - 1
-  );
+  return props.fields.filter((field) => field.column === column);
 };
 </script>
