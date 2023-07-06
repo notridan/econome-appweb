@@ -5,7 +5,8 @@ import Dashboard from "../econome/views/dashboard/Main.vue";
 import Settings from "../econome/views/settings/Main.vue";
 import Roles from "../econome/views/identity-access/roles/Main.vue";
 import Permissions from "../econome/views/identity-access/permissions/Main.vue";
-import Condominiuns from "../econome/views/modules/condominiums/Main.vue";
+import Condominiums from "../econome/views/modules/condominiums/Main.vue";
+import UnitsGroups from "../econome/views/modules/units_groups/Main.vue";
 // import Modules from "../econome/views/identity-access/modules/Main.vue";
 import Users from "../econome/views/identity-access/users/Main.vue";
 import Login from "../econome/views/login/Main.vue";
@@ -69,7 +70,15 @@ const routes = [
       {
         path: "/condominiums",
         name: "condominiums",
-        component: Condominiuns,
+        component: Condominiums,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: "/units_groups",
+        name: "units_groups",
+        component: UnitsGroups,
         meta: {
           requiresAuth: true
         }

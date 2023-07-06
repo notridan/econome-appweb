@@ -45,6 +45,11 @@ export const useMainMenuStore = defineStore("mainMenu", {
         icon: "HomeIcon",
         pageName: "condominiums",
         title: "Condomínios",
+      },
+      {
+        icon: "HomeIcon",
+        pageName: "units_groups",
+        title: "Grupos de Unidades",
       }
 
     ],
