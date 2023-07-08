@@ -7,6 +7,10 @@ import Roles from "../econome/views/identity-access/roles/Main.vue";
 import Permissions from "../econome/views/identity-access/permissions/Main.vue";
 import Condominiums from "../econome/views/modules/condominiums/Main.vue";
 import UnitsGroups from "../econome/views/modules/units_groups/Main.vue";
+import Units from "../econome/views/modules/units/Main.vue";
+import Dependencie from "../econome/views/modules/dependencies/Main.vue";
+import Ocurrency from "../econome/views/modules/ocurrences/Main.vue";
+import Poll from "../econome/views/modules/polls/Main.vue";
 // import Modules from "../econome/views/identity-access/modules/Main.vue";
 import Users from "../econome/views/identity-access/users/Main.vue";
 import Login from "../econome/views/login/Main.vue";
@@ -82,7 +86,39 @@ const routes = [
         meta: {
           requiresAuth: true
         }
-      }
+      },
+      {
+        path: "/units",
+        name: "units",
+        component: Units,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: "/dependencies",
+        name: "dependencies",
+        component: Dependencie,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: "/ocurrences",
+        name: "ocurrences",
+        component: Ocurrency,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: "/polls",
+        name: "polls",
+        component: Poll,
+        meta: {
+          requiresAuth: true
+        }
+      },
     ],
   },
   {
@@ -156,7 +192,7 @@ async function verifyEmail(query){
   const toast = useToast();
   const response = query['email-verify'];
   if (response) {
-    
+
     switch (response) {
       case 'invalid':
         toast.error('Link de verificação de email inválido.');
@@ -167,7 +203,7 @@ async function verifyEmail(query){
       case 'success':
         toast.success('Email verificado com sucesso.');
         break;
-    
+
       default:
         break;
     }

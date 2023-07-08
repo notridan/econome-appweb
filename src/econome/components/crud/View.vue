@@ -6,7 +6,7 @@
       </h2>
     </ModalHeader>
     <ModalBody class="overflow-auto max-h-[calc(100vh-8rem)]">
-      <div 
+      <div
         :class="{
           // needed to compilation time process
           'grid md:grid-cols-1': columns === 1,

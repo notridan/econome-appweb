@@ -40,7 +40,7 @@ const crudConfig = ref({
             'column': 1,
             'crudPermissions': {
                 'edit': false,
-                'create': true,
+                'create': false,
                 'view': false,
                 'index': false
             }
@@ -78,7 +78,7 @@ const crudConfig = ref({
                 'edit': true,
                 'create': true,
                 'view': true,
-                'index': true
+                'index': false
             }
         },
         {

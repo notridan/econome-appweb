@@ -1,9 +1,9 @@
 <template>
     <h2 class="intro-y text-lg font-medium mt-10">{{ config.title }}</h2>
-    <div class="grid grid-cols-12 gap-6 mt-5">
+    <div class="grid grid-cols-12 gap-6 mt-5 overflow-hidden">
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
         <button @click="showNewModal" class="btn btn-primary shadow-md mr-2">{{ config.createButtonText }}</button>
-  
+
         <div class="hidden md:block mx-auto text-slate-500">
           {{ paginationInfo }}
         </div>
@@ -19,7 +19,7 @@
             />
             <Trash2Icon v-if="searchQuery" @click="clearSearch" class="text-red-600 w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
             <SearchIcon  v-else class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" />
-            
+
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
           <tbody v-if="entityStore.items && entityStore.items.data">
             <tr v-for="(entity, index) in entityStore.items.data" :key="index" class="intro-x">
               <td v-for="column in config.fields" :key="column.model" :class="column.row_styles" v-show="column.crudPermissions && column.crudPermissions.index !== false">
-               
+
 
                <div v-if="column.type == 'checkbox'" class="form-switch mt-2">
                 <input
@@ -49,12 +49,11 @@
                 </div>
 
                 <div v-else>
-                  
                   <span>{{ getMask(entity[column.model], column.mask ?? '') }}</span>
                 </div>
               </td>
               <td class="table-report__action">
-  
+
                 <div class="flex justify-center items-center">
                   <a class="flex items-center text-theme-9 mr-3" href="javascript:;" @click="showViewModal(entity)">
                     <Tippy tag="a" href="javascript:;" class="tooltip" content="Visualizar">
@@ -63,16 +62,16 @@
                   </a>
                   <a class="flex items-center mr-3" href="javascript:;" @click="showEditModal(entity)">
                     <Tippy tag="a" href="javascript:;" class="tooltip" content="Editar">
-                      <CheckSquareIcon class="w-4 h-4 mr-1" /> 
+                      <CheckSquareIcon class="w-4 h-4 mr-1" />
                     </Tippy>
                   </a>
                   <a class="flex items-center text-danger" href="javascript:;" @click="callDeleteModal(entity.id)">
-                    <Tippy tag="a" href="javascript:;" class="tooltip" content="Deletar">  
-                      <Trash2Icon class="w-4 h-4 mr-1" /> 
+                    <Tippy tag="a" href="javascript:;" class="tooltip" content="Deletar">
+                      <Trash2Icon class="w-4 h-4 mr-1" />
                     </Tippy>
                   </a>
                 </div>
-  
+
               </td>
             </tr>
           </tbody>
@@ -80,9 +79,9 @@
             @delete="handleDelete"></Delete>
         </table>
       </div>
-  
+
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
-  
+
         <PaginationComponent class="w-full sm:w-auto sm:mr-auto" :limit="3" :keepLength="false" :data="entityStore.items"
           @pagination-change-page="entityStore.fetchItems" />
     </div>
@@ -104,15 +103,15 @@ import View from "@/econome/components/crud/View.vue";
 import { Mask } from "maska";
 
 function getMask(value, mask){
-  
+
   if(mask != '' && value != undefined){
     const data = new Mask({ mask: mask })
     return data.masked(value)
   }else{
     return value;
   }
-  
-  
+
+
 }
 
 // MODULE INFO
@@ -200,7 +199,7 @@ async function showEditModal(item) {
 //   entityStore.updateItem(updatedItem.id, updatedItem);
 // }
 
-// INITIAL DATA 
+// INITIAL DATA
 
 onMounted(async () => {
   await entityStore.fetchItems();

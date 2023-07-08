@@ -10,6 +10,36 @@ export const useMainMenuStore = defineStore("mainMenu", {
         title: "Resumo Geral",
       },
       {
+        icon: "HomeIcon",
+        pageName: "condominiums",
+        title: "Condomínios",
+      },
+      {
+        icon: "HomeIcon",
+        pageName: "units_groups",
+        title: "Grupos de Unidades",
+      },
+      {
+        icon: "ListIcon",
+        pageName: "units",
+        title: "Residências",
+      },
+      {
+        icon: "LayersIcon",
+        pageName: "dependencies",
+        title: "Dependências",
+      },
+      {
+        icon: "AlertCircleIcon",
+        pageName: "ocurrences",
+        title: "Ocorrências",
+      },
+      {
+        icon: "FileMinusIcon",
+        pageName: "polls",
+        title: "Enquetes",
+      },
+      {
         icon: "SettingsIcon",
         pageName: "settings",
         title: "Configurações"
@@ -41,16 +71,7 @@ export const useMainMenuStore = defineStore("mainMenu", {
           }
         ]
       },
-      {
-        icon: "HomeIcon",
-        pageName: "condominiums",
-        title: "Condomínios",
-      },
-      {
-        icon: "HomeIcon",
-        pageName: "units_groups",
-        title: "Grupos de Unidades",
-      }
+
 
     ],
   }),
