@@ -1,6 +1,6 @@
 <template>
     <h2 class="intro-y text-lg font-medium mt-10">{{ config.title }}</h2>
-    <div class="grid grid-cols-12 gap-6 mt-5 overflow-hidden">
+    <div class="grid grid-cols-12 gap-6 mt-5 overflow-auto">
       <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
         <button @click="showNewModal" class="btn btn-primary shadow-md mr-2">{{ config.createButtonText }}</button>
 

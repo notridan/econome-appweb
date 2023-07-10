@@ -11,6 +11,9 @@ import Units from "../econome/views/modules/units/Main.vue";
 import Dependencie from "../econome/views/modules/dependencies/Main.vue";
 import Ocurrency from "../econome/views/modules/ocurrences/Main.vue";
 import Poll from "../econome/views/modules/polls/Main.vue";
+import Providers from "../econome/views/modules/mod_providers/Main.vue";
+import Dweller from "../econome/views/modules/dwellers/Main.vue";
+import Finance from "../econome/views/modules/finances/Main.vue";
 // import Modules from "../econome/views/identity-access/modules/Main.vue";
 import Users from "../econome/views/identity-access/users/Main.vue";
 import Login from "../econome/views/login/Main.vue";
@@ -115,6 +118,30 @@ const routes = [
         path: "/polls",
         name: "polls",
         component: Poll,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: "/providers",
+        name: "providers",
+        component: Providers,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: "/dwellers",
+        name: "dwellers",
+        component: Dweller,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: "/finances",
+        name: "finances",
+        component: Finance,
         meta: {
           requiresAuth: true
         }
